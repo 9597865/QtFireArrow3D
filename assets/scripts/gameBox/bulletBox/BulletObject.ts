@@ -88,7 +88,8 @@ export class BulletObject extends Vehicle {
         }
 
         //增加重力
-        this.velocity = this.velocity.add(new Vec3(0, -this._gravity*0.003, 0)); 
+        // this.velocity = this.velocity.add(new Vec3(0, -this._gravity*0.003, 0)); 
+        this.velocity = this.velocity.add(new Vec3(0, 0, 0)); 
 
         // 应用转向力到速度（考虑时间 deltaTime，确保不同帧率下表现一致）
         // 乘以60统一帧率影响
