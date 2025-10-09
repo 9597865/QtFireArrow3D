@@ -1,0 +1,92 @@
+import { _decorator, Component, EventTouch, input, Input, Node, Vec3 } from 'cc';
+import { Player } from './playerBox/Player';
+import { EnemyObject } from './enemyBox/EnemyObject';
+import { QtMath } from '../qt_cocos_ts/utils/QtMath';
+import { BulletControl } from './bulletBox/BulletControl';
+const { ccclass, property } = _decorator;
+
+@ccclass('GameMainControl')
+export class GameMainControl extends Component {
+
+    @property(Player)
+    player: Player = null;
+    @property(EnemyObject)
+    enemy: EnemyObject = null;
+
+    @property
+    // 旋转速度因子，值越大旋转越快
+    rotateSpeed: number = 5;
+    @property
+    // 允许的最小角度误差，小于此值则视为已对准
+    minAngleError: number = 0.5;
+
+    @property(BulletControl)
+    bulletCtrl: BulletControl = null;
+    
+    start() {
+        
+
+
+    }
+
+    update(deltaTime: number) {
+        this.player.gameTick(deltaTime);
+        this.bulletCtrl.gameTick(deltaTime);
+
+
+        if (!this.enemy) return;
+        
+        // 计算炮口到目标的方向向量
+        const playerGunPos:Vec3 = this.player.getGunPosition();
+        const enemyPos:Vec3 = this.enemy.node.getPosition();
+        const direction:Vec3 = enemyPos.subtract(playerGunPos);
+        if (direction.length() < 1) return; // 目标过近时不旋转
+        direction.normalize();
+        // 计算目标角度（弧度）
+        const targetAngle = Math.atan2(direction.y, direction.x);
+        let targetDegree = QtMath.radiansToDegrees(targetAngle);
+        let angle = Math.floor(targetDegree)+270;
+        this.player.setGunAngle(angle);
+
+        
+
+    }
+    onEnable () {
+        input.on(Input.EventType.TOUCH_START, this.onTouchStart, this);
+        input.on(Input.EventType.TOUCH_MOVE, this.onTouchMove, this);
+        input.on(Input.EventType.TOUCH_END, this.onTouchEnd, this);
+    }
+
+    onTouchStart(event: EventTouch) {
+        console.log(event.getLocation());  // Location on screen space
+        console.log(event.getUILocation());  // Location on UI space
+    }
+    onTouchMove(event: EventTouch) {
+        console.log(event.getLocation());  // Location on screen space
+        console.log(event.getUILocation());  // Location on UI space
+
+    }
+    onTouchEnd(event: EventTouch) {
+        // console.log(event.getLocation());  // Location on screen space
+        // console.log(event.getUILocation());  // Location on UI space
+    }
+    
+    onDisable () {
+        input.off(Input.EventType.TOUCH_START, this.onTouchStart, this);
+        input.off(Input.EventType.TOUCH_MOVE, this.onTouchMove, this);
+        input.off(Input.EventType.TOUCH_END, this.onTouchEnd, this);
+    }
+
+    onBtn(){
+        // console.log("btn click");
+        //this.player.settingPlayer();
+        this.enemy.node.setPosition(this.enemy.node.getPosition().x, QtMath.randomInt(5,9), 0);
+    }
+    onBtn2(){
+        // console.log("btn click2");
+        //开火
+        // this.player.fire();
+        this.bulletCtrl.fire(this.player);
+    }
+}
+
