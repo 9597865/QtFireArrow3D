@@ -1,10 +1,16 @@
-import { _decorator, ColliderComponent, Component, ICollisionEvent, Node } from 'cc';
+import { _decorator, ColliderComponent, Component, ICollisionEvent, Node, RigidBody } from 'cc';
 const { ccclass, property } = _decorator;
 
 @ccclass('BulletCollider')
 export class BulletCollider extends Component {
+
+    private rg:RigidBody = null;
     start() {
-         // 注册碰撞事件
+        //
+        this.rg = this.getComponent(RigidBody);
+        console.log('BulletCollider start');
+        console.log(this.rg);
+        // 注册碰撞事件
         let collider = this.getComponent(ColliderComponent);
         console.log(collider);
         // if (collider) {
@@ -19,13 +25,21 @@ export class BulletCollider extends Component {
         
     }
     
-    private onCollisionStay(e: ICollisionEvent){}
-    private onCollisionExit (e: ICollisionEvent){}
+    private onCollisionStay(e: ICollisionEvent){
+    }
+    private onCollisionExit (e: ICollisionEvent){
+        
+    }
     private onCollisionEnter (e: ICollisionEvent){
+        // console.log(e.selfCollider.name);//bulletCylinder<BoxCollider>
         // console.log('e.otherCollider.tag');
         // console.log('---'+e.otherCollider.name);
         // console.log(e.otherCollider.node.parent);
+
+
+        const selfName = e.selfCollider.name;
         const otherName = e.otherCollider.name;
+
         console.log('bulletFab<BoxCollider>----',otherName);
         if(
             otherName == 'bulletFab<BoxCollider>'

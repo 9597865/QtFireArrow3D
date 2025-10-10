@@ -18,7 +18,7 @@ export class BulletObject extends Vehicle {
     private _skinObject:Node = null;
 
     private _gravity:number = 0.98;
-    
+    private _gravNum:number = 0.002;
     // 刚体组件
     // private rigidBody: RigidBody | null = null;
 
@@ -79,7 +79,13 @@ export class BulletObject extends Vehicle {
     public get steeringForce():Vec3{
         return this._steeringForce;
     }
+    public set gravNum(value:number){
+        this._gravNum = value;
+    }
 
+    public get gravNum():number{
+        return this._gravNum;
+    }
     override gameTick(deltaTime: number) {
 
         this._steeringForce = this._steeringForce.divide3f(this.mass, this.mass, this.mass);
@@ -88,8 +94,8 @@ export class BulletObject extends Vehicle {
         }
 
         //增加重力
-        // this.velocity = this.velocity.add(new Vec3(0, -this._gravity*0.003, 0)); 
-        this.velocity = this.velocity.add(new Vec3(0, 0, 0)); 
+        this.velocity = this.velocity.add(new Vec3(0, -this._gravity*this._gravNum, 0)); 
+        //this.velocity = this.velocity.add(new Vec3(0, 0, 0)); 
 
         // 应用转向力到速度（考虑时间 deltaTime，确保不同帧率下表现一致）
         // 乘以60统一帧率影响

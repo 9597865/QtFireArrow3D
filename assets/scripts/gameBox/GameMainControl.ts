@@ -1,8 +1,11 @@
-import { _decorator, Component, EventTouch, input, Input, Node, Vec3 } from 'cc';
+import { _decorator, Component, EventTouch, find, input, Input, Node, Vec3 } from 'cc';
 import { Player } from './playerBox/Player';
 import { EnemyObject } from './enemyBox/EnemyObject';
 import { QtMath } from '../qt_cocos_ts/utils/QtMath';
 import { BulletControl } from './bulletBox/BulletControl';
+import { BulletPointPathLineCtrol } from './bulletBox/BulletPointPathLineCtrol';
+import { AppNotification } from '../qt_cocos_ts/event/AppNotification';
+import { GameEvent } from './events/GameEvent';
 const { ccclass, property } = _decorator;
 
 @ccclass('GameMainControl')
@@ -23,9 +26,14 @@ export class GameMainControl extends Component {
     @property(BulletControl)
     bulletCtrl: BulletControl = null;
     
+    private pointPathLineBox:Node = null;
+
     start() {
         
-
+        this.pointPathLineBox = find("GameMainBox/gameBox/bulletBox").getChildByName("bulletPointPathLineBox"); // this.node.getChildByName("bulletPointPathLineBox");
+        let pointPathObject = this.pointPathLineBox.getComponent("BulletPointPathLineCtrol");
+        console.log("BulletPointPathLineCtrol");
+        console.log(pointPathObject);
 
     }
 
@@ -36,6 +44,7 @@ export class GameMainControl extends Component {
 
         if (!this.enemy) return;
         
+        /*
         // 计算炮口到目标的方向向量
         const playerGunPos:Vec3 = this.player.getGunPosition();
         const enemyPos:Vec3 = this.enemy.node.getPosition();
@@ -47,7 +56,7 @@ export class GameMainControl extends Component {
         let targetDegree = QtMath.radiansToDegrees(targetAngle);
         let angle = Math.floor(targetDegree)+270;
         this.player.setGunAngle(angle);
-
+        */
         
 
     }
@@ -58,17 +67,28 @@ export class GameMainControl extends Component {
     }
 
     onTouchStart(event: EventTouch) {
-        console.log(event.getLocation());  // Location on screen space
-        console.log(event.getUILocation());  // Location on UI space
+        // console.log("onTouchStart");
+        // console.log(event.getLocation());  // Location on screen space
+        // console.log(event.getUILocation());  // Location on UI space
+
+        AppNotification.emit(GameEvent.EVENT_STAGE_MOUSE_START, {event});
     }
     onTouchMove(event: EventTouch) {
-        console.log(event.getLocation());  // Location on screen space
-        console.log(event.getUILocation());  // Location on UI space
+        // console.log(event.getLocation());  // Location on screen space
+        // console.log(event.getUILocation());  // Location on UI space
+        // console.log(event.getLocation()); 
+        AppNotification.emit(GameEvent.EVENT_STAGE_MOUSE_MOVE, {event});
+
 
     }
     onTouchEnd(event: EventTouch) {
         // console.log(event.getLocation());  // Location on screen space
         // console.log(event.getUILocation());  // Location on UI space
+        
+        AppNotification.emit(GameEvent.EVENT_STAGE_MOUSE_END, {event});
+        // console.log("onTouchEnd");
+
+        this.bulletCtrl.fire(this.player);
     }
     
     onDisable () {
