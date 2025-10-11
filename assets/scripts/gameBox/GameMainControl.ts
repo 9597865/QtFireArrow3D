@@ -32,8 +32,8 @@ export class GameMainControl extends Component {
         
         this.pointPathLineBox = find("GameMainBox/gameBox/bulletBox").getChildByName("bulletPointPathLineBox"); // this.node.getChildByName("bulletPointPathLineBox");
         let pointPathObject = this.pointPathLineBox.getComponent("BulletPointPathLineCtrol");
-        console.log("BulletPointPathLineCtrol");
-        console.log(pointPathObject);
+        // console.log("BulletPointPathLineCtrol");
+        // console.log(pointPathObject);
 
     }
 

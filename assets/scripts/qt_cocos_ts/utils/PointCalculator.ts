@@ -21,10 +21,12 @@ export function getPointsBetweenTwoPoints(start: Vec2 | Vec3, end: Vec2 | Vec3, 
         new Vec2(end.x - start.x, end.y - start.y) : 
         new Vec3(end.x - start.x, end.y - start.y, end.z - start.z);
     
+    const dx = end.x - start.x;
     // 计算每个间隔的比例（0到1之间分为4等份）
     for (let i = 0; i < count; i++) {
         const ratio = i / (count - 1)/cutLine; // 比例从0到1
-        
+        // 抛物线公式
+        const curveOffset = -0.098*2 * dx * dx * (ratio - 0) * (ratio - 0.25);
         // 计算当前点坐标
         const point = (start instanceof Vec2) ? 
             new Vec2(
@@ -33,7 +35,8 @@ export function getPointsBetweenTwoPoints(start: Vec2 | Vec3, end: Vec2 | Vec3, 
             ) : 
             new Vec3(
                 start.x + delta.x * ratio,
-                start.y + delta.y * ratio,
+                // start.y + delta.y * ratio,//直线的
+                start.y + delta.y * ratio + curveOffset,
                 start.z + delta.z * ratio
             );
         

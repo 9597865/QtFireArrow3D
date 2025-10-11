@@ -21,23 +21,15 @@ export class BulletPointPathLineCtrol extends Component {
         AppNotification.on(GameEvent.EVENT_STAGE_MOUSE_MOVE, this.onStageMouseMove, this);
         AppNotification.on(GameEvent.EVENT_STAGE_MOUSE_END, this.onStageMouseEnd, this);
 
-        // const p = instantiate(this.point);
-        // p.setPosition(v3.position);
-        // p.setPosition(new Vec3(0,0,0));
-        // this.node.addChild(p);
-        // this.pointPathLineListArr.push(p);
+        
         this.uiTransform = this.getComponent(UITransform);
         if(this.uiTransform){
-            console.log("BulletPointPathLineCtrol UITransform");
-            console.log(this.uiTransform);
+            // console.log("BulletPointPathLineCtrol UITransform");
+            // console.log(this.uiTransform);
         }
 
         this.cameraObj = find("Main Camera").getComponent(Camera) as Camera;
-        console.log("BulletPointPathLineCtrol cameraObj");
-        console.log(this.cameraObj);
         this.player = find("GameMainBox/gameBox/playerBox/playerObject").getComponent(Player) as Player;
-        console.log("BulletPointPathLineCtrol player");
-        console.log(this.player);
         
 
     }
@@ -47,9 +39,9 @@ export class BulletPointPathLineCtrol extends Component {
     }
     onStageMouseMove(data:any){
         console.log("BulletPointPathLineCtrol onStageMouseMove");
-        // console.log(data.event.getLocation());
+        //console.log(data.event.getLocation());
         //console.log(data.event.getUILocation());
-        // console.log(this.player.node.getPosition());
+        //console.log(this.player.node.getPosition());
         if(!this.player){
             return;
         }
@@ -64,10 +56,11 @@ export class BulletPointPathLineCtrol extends Component {
         
         
 
-        getPointsBetweenTwoPoints(p1,p2Local,10).forEach((v3:Vec3)=>{
+        getPointsBetweenTwoPoints(p1,p2Local,10).forEach((v3:Vec3,index:number)=>{
+            const scale:number = 0.05+0.1/(index+1);
             const p = instantiate(this.point);
             p.setPosition(v3);
-            p.setScale(new Vec3(0.1,0.1,0.1));
+            p.setScale(new Vec3(scale,scale,0.1));
             this.node.addChild(p);
             this.pointPathLineListArr.push(p);
         });

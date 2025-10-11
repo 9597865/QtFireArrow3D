@@ -105,7 +105,7 @@ export class BulletObject extends Vehicle {
         }
 
         //
-        const angle = Math.atan2(this.velocity.y, this.velocity.x) * 180 / Math.PI + 90 ;
+        const angle = this.getBulletAngle(); 
         this._skinObject.setRotationFromEuler(new Vec3(0,0,angle));
         this._skinObject.setPosition(this.position);
 
@@ -159,7 +159,10 @@ export class BulletObject extends Vehicle {
         // const angle = Math.atan2(this.velocity.y, this.velocity.x) * 180 / Math.PI + 180;
         // this._skinObject.setRotationFromEuler(new Vec3(angle,0,0));
     }
-    
+    public getBulletAngle(){
+        const angle = Math.atan2(this.velocity.y, this.velocity.x) * 180 / Math.PI + 90 ;
+        return angle;
+    }
     seek(target:Vec3):void
 	{
 		let desiredVelocity:Vec3 = target.subtract(this.position);
