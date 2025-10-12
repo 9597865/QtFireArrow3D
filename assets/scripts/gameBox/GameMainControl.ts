@@ -26,15 +26,17 @@ export class GameMainControl extends Component {
     @property(BulletControl)
     bulletCtrl: BulletControl = null;
     
+    private enemyBox:Node = null;
     private pointPathLineBox:Node = null;
 
     start() {
         
         this.pointPathLineBox = find("GameMainBox/gameBox/bulletBox").getChildByName("bulletPointPathLineBox"); // this.node.getChildByName("bulletPointPathLineBox");
         let pointPathObject = this.pointPathLineBox.getComponent("BulletPointPathLineCtrol");
-        // console.log("BulletPointPathLineCtrol");
-        // console.log(pointPathObject);
 
+        this.enemyBox = find("GameMainBox/gameBox/enemyBox"); // this.node.getChildByName("enemyBox");
+        
+        console.log("enemyBox",this.enemyBox);
     }
 
     update(deltaTime: number) {
@@ -42,7 +44,6 @@ export class GameMainControl extends Component {
         this.bulletCtrl.gameTick(deltaTime);
 
 
-        if (!this.enemy) return;
         
         /*
         // 计算炮口到目标的方向向量
@@ -96,6 +97,8 @@ export class GameMainControl extends Component {
         input.off(Input.EventType.TOUCH_MOVE, this.onTouchMove, this);
         input.off(Input.EventType.TOUCH_END, this.onTouchEnd, this);
     }
+
+    
 
     onBtn(){
         // console.log("btn click");

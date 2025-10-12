@@ -1,4 +1,4 @@
-import { _decorator, Component, instantiate, Node, Prefab, Vec3 } from 'cc';
+import { _decorator, Component, instantiate, Node, ParticleSystem, Prefab, Vec3 } from 'cc';
 import { Player } from '../playerBox/Player';
 import { BulletObject } from './BulletObject';
 import { QtMath } from '../../qt_cocos_ts/utils/QtMath';
@@ -15,9 +15,13 @@ export class BulletControl extends Component {
     @property(Prefab)
     bulletStaticPrefab: Node = null;
 
+    @property([Prefab])
+    bulletParticleArr: Prefab[] = [];
+
     private totalTime:number = 0;
 
     bulletLayerBox: Node = null;
+    bulletParticleBox: Node = null;
     bulletCylinderStaticBox: Node = null;
 
     bulletLayerListArr: Node[] = [];
@@ -29,6 +33,7 @@ export class BulletControl extends Component {
     start() {
         // 获取名为"bulletLayerBox"的子节点，用于存放子弹对象
         this.bulletLayerBox = this.node.getChildByName("bulletLayerBox");
+        this.bulletParticleBox = this.node.getChildByName("bulletParticleBox");
         this.bulletCylinderStaticBox = this.node.getChildByName("bulletCylinderStaticBox");
         // 检查bulletLayerBox是否存在
         if(this.bulletLayerBox){
@@ -38,6 +43,8 @@ export class BulletControl extends Component {
         }
 
         AppNotification.on(GameEvent.EVENT_BULLET_HIT_FLOOR, this.onBulletHitFloor, this);
+        AppNotification.on(GameEvent.EVENT_BULLET_HIT_ENEMY_FLOOR, this.onBulletHitEnemyFloor, this);
+        
     }
 
     // update(deltaTime: number) {
@@ -77,6 +84,41 @@ export class BulletControl extends Component {
         // this.node.addChild(blt);
         // blt.setPosition(x,y,z);
     }
+    /**
+     * 子弹击中敌人地面时的处理函数
+     * @param data 包含子弹数据的对象
+     */
+    onBulletHitEnemyFloor(data:IBulletDataObject){
+        const bltAngle:number = data.bulletAngle;
+        const bltObj:BulletObject = data.bulletObject;
+        const {x,y,z} = bltObj.node.getPosition();
+        //粒子特效
+        const particleIndex = Math.floor(this.bulletParticleArr.length-1);
+        const particleFab = this.bulletParticleArr[particleIndex];
+        const particleNode:Node = instantiate(particleFab);
+        particleNode.setPosition(x,y,z);
+        // particleNode.setScale(2,2,2);
+        // particleNode.setRotationFromEuler(0,0,bltAngle);
+        this.bulletParticleBox.addChild(particleNode);
+        //
+        const ps:ParticleSystem = particleNode.getComponent(ParticleSystem) as ParticleSystem;
+        ps.play();
+        // console.log(ps);
+        console.log("bulletControl onBulletHitEnemyFloor");
+        setTimeout(() => {
+            particleNode.destroy();
+        }, 1000);
+
+        // //静态子弹
+        // const blt = instantiate(this.bulletStaticPrefab);
+        // blt.setPosition(x,y,z);
+        // blt.setRotationFromEuler(0,0,bltAngle);
+        // this.bulletCylinderStaticBox.addChild(blt);
+
+        // setTimeout(() => {
+        //     blt.destroy();
+        // }, 2000);
+    }
     destoryBullet(){
         if(Math.round(this.totalTime)%5==0){
             // console.log('========')
@@ -103,7 +145,7 @@ export class BulletControl extends Component {
         blt.setRotationFromEuler(0,0,player.getGunAngle());
         //
         const bltObj:BulletObject = blt.getComponent('BulletObject') as BulletObject;
-        const velocity = QtMath.convertSpeedAngleToVector3(0.2,player.getGunAngle()+90);
+        const velocity = QtMath.convertSpeedAngleToVector3(0.3,player.getGunAngle()+90);
         bltObj.name = 'bullet';
         bltObj.velocity = velocity;
         bltObj.position = player.node.getPosition();

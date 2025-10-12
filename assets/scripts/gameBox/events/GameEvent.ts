@@ -9,5 +9,7 @@ export class GameEvent {
 
 
     public static EVENT_BULLET_HIT_FLOOR:string = "event_bullet_hit_floor" //飞机爆炸
+    public static EVENT_BULLET_HIT_ENEMY_FLOOR:string = "event_bullet_hit_enemy_floor" //飞机爆炸
+    
 }
 

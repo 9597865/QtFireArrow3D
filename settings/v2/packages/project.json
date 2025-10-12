@@ -32,14 +32,19 @@
       {
         "index": 4,
         "name": "enemy"
+      },
+      {
+        "index": 5,
+        "name": "enemyFloor"
       }
     ],
     "collisionMatrix": {
       "0": 1,
       "1": 28,
-      "2": 18,
+      "2": 50,
       "3": 2,
-      "4": 6
+      "4": 38,
+      "5": 20
     }
   }
 }

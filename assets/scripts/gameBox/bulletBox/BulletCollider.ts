@@ -40,18 +40,34 @@ export class BulletCollider extends Component {
         // console.log(e.otherCollider.node.parent);
 
         // const selfName = e.selfCollider.name;
+        let nd:BulletObject = this.node.parent.getComponent(BulletObject) as BulletObject;
+        let angle:number = nd.node.eulerAngles.z;
         const otherName = e.otherCollider.name;
+        switch (otherName) {
+            case 'gameFloorCube_top<BoxCollider>':
+            case 'gameFloorCube_bottom<BoxCollider>':
+            case 'gameFloorCube_right<BoxCollider>':
+            case 'gameFloorCube_left<BoxCollider>':
+            case 'enemyCube<BoxCollider>':
+                //碰到游戏窗口边框
+                nd.velocity = Vec3.ZERO; 
+                nd.node.active = false;
+                AppNotification.emit(GameEvent.EVENT_BULLET_HIT_FLOOR, {bulletObject:nd, bulletAngle:angle});
+                break;
+            case 'enemyFloorCube<BoxCollider>':
+                // nd.velocity = Vec3.ZERO; 
+                nd.node.active = false;
+                AppNotification.emit(GameEvent.EVENT_BULLET_HIT_ENEMY_FLOOR, {bulletObject:nd, bulletAngle:angle}); 
+                break;
+            default:
+                break;
+        }
         if(
-            otherName.indexOf('gameFloorCube') != -1 
+            otherName.indexOf('gameFloorCube') != -1 || 
+            otherName.indexOf('enemyCube') != -1 
+            
         ){
-            //碰到游戏窗口边框
-            let nd:BulletObject = this.node.parent.getComponent(BulletObject) as BulletObject;
-            nd.velocity = Vec3.ZERO; 
-            nd.node.active = false;
-            // console.log('bullet hit wall');
-
-            let angle:number = nd.node.eulerAngles.z;
-            AppNotification.emit(GameEvent.EVENT_BULLET_HIT_FLOOR, {bulletObject:nd, bulletAngle:angle});
+            
 
             // this.rigid.clearState();
             // console.log(nd);
