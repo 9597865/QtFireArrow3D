@@ -48,11 +48,23 @@ export class BulletCollider extends Component {
             case 'gameFloorCube_bottom<BoxCollider>':
             case 'gameFloorCube_right<BoxCollider>':
             case 'gameFloorCube_left<BoxCollider>':
-            case 'enemyCube<BoxCollider>':
                 //碰到游戏窗口边框
                 nd.velocity = Vec3.ZERO; 
                 nd.node.active = false;
                 AppNotification.emit(GameEvent.EVENT_BULLET_HIT_FLOOR, {bulletObject:nd, bulletAngle:angle});
+                break;
+            case 'enemyBody<BoxCollider>':
+                //打中敌人身体
+                nd.velocity = Vec3.ZERO; 
+                nd.node.active = false;
+                AppNotification.emit(
+                    GameEvent.EVENT_BULLET_HIT_ENEMYOBJECT_BODY, 
+                    {
+                        enemyBody:e.otherCollider,
+                        bulletObject:nd, 
+                        bulletAngle:angle
+                    }
+                );
                 break;
             case 'enemyFloorCube<BoxCollider>':
                 // nd.velocity = Vec3.ZERO; 
