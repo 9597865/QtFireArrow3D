@@ -7,6 +7,7 @@ const { ccclass, property } = _decorator;
 @ccclass('BulletCollider')
 export class BulletCollider extends Component {
     
+    private collider:ColliderComponent = null;
     private rigid:RigidBody = null;
     start() {
         //
@@ -14,13 +15,13 @@ export class BulletCollider extends Component {
         // console.log('BulletCollider start');
         // console.log(this.rg);
         // 注册碰撞事件
-        let collider = this.getComponent(ColliderComponent);
+        this.collider = this.getComponent(ColliderComponent);
         // console.log(collider);
         // if (collider) {
             // collider.on(ContactTiype.BEGIN_CONTACT, this.onBeginContact, this);
-            collider.on('onCollisionEnter', this.onCollisionEnter, this);
-            collider.on('onCollisionStay', this.onCollisionStay, this);
-            collider.on('onCollisionExit', this.onCollisionExit, this);
+            this.collider.on('onCollisionEnter', this.onCollisionEnter, this);
+            this.collider.on('onCollisionStay', this.onCollisionStay, this);
+            this.collider.on('onCollisionExit', this.onCollisionExit, this);
         // }   
     }
 
@@ -38,9 +39,12 @@ export class BulletCollider extends Component {
         // console.log('e.otherCollider.tag');
         // console.log('---'+e.otherCollider.name);
         // console.log(e.otherCollider.node.parent);
-
+        // this.collider.off('onCollisionEnter', this.onCollisionEnter);
         // const selfName = e.selfCollider.name;
         let nd:BulletObject = this.node.parent.getComponent(BulletObject) as BulletObject;
+        if(nd==null){
+            return;
+        }
         let angle:number = nd.node.eulerAngles.z;
         const otherName = e.otherCollider.name;
         switch (otherName) {
@@ -48,10 +52,12 @@ export class BulletCollider extends Component {
             case 'gameFloorCube_bottom<BoxCollider>':
             case 'gameFloorCube_right<BoxCollider>':
             case 'gameFloorCube_left<BoxCollider>':
+            case 'gameFloorCube_right-001<BoxCollider>':
                 //碰到游戏窗口边框
                 nd.velocity = Vec3.ZERO; 
                 nd.node.active = false;
                 AppNotification.emit(GameEvent.EVENT_BULLET_HIT_FLOOR, {bulletObject:nd, bulletAngle:angle});
+                this.collider.off('onCollisionEnter', this.onCollisionEnter);
                 break;
             case 'enemyBody<BoxCollider>':
                 //打中敌人身体
@@ -74,6 +80,12 @@ export class BulletCollider extends Component {
             default:
                 break;
         }
+        
+        console.log('bulletFab<BoxCollider>----',otherName);
+
+
+        return;
+
         if(
             otherName.indexOf('gameFloorCube') != -1 || 
             otherName.indexOf('enemyCube') != -1 
@@ -95,7 +107,6 @@ export class BulletCollider extends Component {
             // })
         }
         //
-        console.log('bulletFab<BoxCollider>----',otherName);
         if(
             // otherName.indexOf('gameFloorCube') != -1 //'gameFloorCube_right<BoxCollider>'
             otherName == 'gameFloorCube_right<BoxCollider>'
