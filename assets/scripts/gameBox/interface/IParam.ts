@@ -6,4 +6,5 @@ export interface IBulletDataObject<T = void>{
     bulletObject:BulletObject,
     bulletAngle:number,
     enemyBody?:EnemyObject,
+    enemyHead?:EnemyObject,
 }

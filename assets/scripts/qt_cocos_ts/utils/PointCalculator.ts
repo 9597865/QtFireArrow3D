@@ -26,7 +26,9 @@ export function getPointsBetweenTwoPoints(start: Vec2 | Vec3, end: Vec2 | Vec3, 
     for (let i = 0; i < count; i++) {
         const ratio = i / (count - 1)/cutLine; // 比例从0到1
         // 抛物线公式
-        const curveOffset = -0.098*2 * dx * dx * (ratio - 0) * (ratio - 0.25);
+        // 0.5调整弯曲度
+        // ratio*2 是调整弧度
+        const curveOffset = -0.098 * dx * dx * (ratio - 0) * (ratio*2 - 0.25);
         // 计算当前点坐标
         const point = (start instanceof Vec2) ? 
             new Vec2(

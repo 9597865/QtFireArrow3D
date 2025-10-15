@@ -53,8 +53,6 @@ export class BulletPointPathLineCtrol extends Component {
         let p2Local:Vec3 = this.uiTransform.convertToNodeSpaceAR(p2);
         p2Local.z = 0;
 
-        
-        
 
         getPointsBetweenTwoPoints(p1,p2Local,10).forEach((v3:Vec3,index:number)=>{
             const scale:number = 0.05+0.1/(index+1);

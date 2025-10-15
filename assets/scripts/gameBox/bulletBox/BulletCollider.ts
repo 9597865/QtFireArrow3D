@@ -2,6 +2,7 @@ import { _decorator, ColliderComponent, Component, ICollisionEvent, Node, RigidB
 import { BulletObject } from './BulletObject';
 import { AppNotification } from '../../qt_cocos_ts/event/AppNotification';
 import { GameEvent } from '../events/GameEvent';
+import { EnemyObject } from '../enemyBox/EnemyObject';
 const { ccclass, property } = _decorator;
 
 @ccclass('BulletCollider')
@@ -59,6 +60,18 @@ export class BulletCollider extends Component {
                 AppNotification.emit(GameEvent.EVENT_BULLET_HIT_FLOOR, {bulletObject:nd, bulletAngle:angle});
                 this.collider.off('onCollisionEnter', this.onCollisionEnter);
                 break;
+            case 'enemyHead<BoxCollider>':
+                nd.velocity = Vec3.ZERO; 
+                nd.node.active = false;
+                AppNotification.emit(
+                    GameEvent.EVENT_BULLET_HIT_ENEMYOBJECT_HEAD, 
+                    {
+                        enemyHead:e.otherCollider.node.parent.parent.getComponent(EnemyObject),
+                        bulletObject:nd, 
+                        bulletAngle:angle
+                    }
+                );
+                break;
             case 'enemyBody<BoxCollider>':
                 //打中敌人身体
                 nd.velocity = Vec3.ZERO; 
@@ -66,7 +79,7 @@ export class BulletCollider extends Component {
                 AppNotification.emit(
                     GameEvent.EVENT_BULLET_HIT_ENEMYOBJECT_BODY, 
                     {
-                        enemyBody:e.otherCollider,
+                        enemyBody:e.otherCollider.node.parent.parent.getComponent(EnemyObject),
                         bulletObject:nd, 
                         bulletAngle:angle
                     }

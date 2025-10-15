@@ -36,13 +36,9 @@ export class BulletControl extends Component {
         this.bulletLayerBox = this.node.getChildByName("bulletLayerBox");
         this.bulletParticleBox = this.node.getChildByName("bulletParticleBox");
         this.bulletCylinderStaticBox = this.node.getChildByName("bulletCylinderStaticBox");
-        // 检查bulletLayerBox是否存在
-        if(this.bulletLayerBox){
-            // 以下两行被注释掉的代码用于调试输出
-            // console.log("bulletLayerBox is null");
-            // console.log(this.bulletLayerBox)
-        }
+        
 
+        AppNotification.on(GameEvent.EVENT_BULLET_HIT_ENEMYOBJECT_HEAD, this.onBulletHitEnemyHead, this);
         AppNotification.on(GameEvent.EVENT_BULLET_HIT_ENEMYOBJECT_BODY, this.onBulletHitEnemyBody, this);
         AppNotification.on(GameEvent.EVENT_BULLET_HIT_FLOOR, this.onBulletHitFloor, this);
         AppNotification.on(GameEvent.EVENT_BULLET_HIT_ENEMY_FLOOR, this.onBulletHitEnemyStanderFloor, this);
@@ -64,15 +60,41 @@ export class BulletControl extends Component {
         this.destoryBullet();
     }
 
+    onBulletHitEnemyHead(data:IBulletDataObject){
+        console.log("bulletControl onBulletHitEnemyHead");
+        const {bulletAngle, bulletObject:bltObj, enemyHead} = data;
+        // 获取子弹节点的位置坐标
+        const {x,y,z} = bltObj.node.getPosition();
+        //粒子特效部分
+        const particleIndex = Math.floor(this.bulletParticleArr.length-1);  // 获取粒子特效数组最后一个元素的索引
+        const particleFab = this.bulletParticleArr[particleIndex];  // 获取粒子特效预制体
+        const particleNode:Node = instantiate(particleFab);  // 实例化粒子特效节点
+        particleNode.setPosition(x,y,z);  // 设置粒子特效位置
+        // particleNode.setScale(2,2,2);  // 设置粒子特效缩放（已注释）
+        // particleNode.setRotationFromEuler(0,0,bltAngle);  // 设置粒子特效旋转（已注释）
+        this.bulletParticleBox.addChild(particleNode);  // 将粒子特效添加到子弹粒子盒子中
+        //
+        const ps:ParticleSystem = particleNode.getComponent(ParticleSystem) as ParticleSystem;
+        ps.play();
+        // console.log(ps);  // 输出粒子系统信息（已注释）
+        console.log("bulletControl onBulletHitEnemyHead");  // 输出日志信息
+        //
+        bltObj.attackLife = 12;
+        enemyHead.beaten(bltObj.attackLife);
+        // 延迟执行销毁操作
+        setTimeout(() => {
+            particleNode.destroy();  // 销毁粒子特效节点
+            // 静态子弹部分（已注释）
+            // enemyHead.node.parent.parent.destroy();
+            if(enemyHead.life<=0) enemyHead.del();
+        }, 1000);
+    }
+
     /**
      * 子弹击中敌人身体的处理函数
      * @param data 包含子弹信息的接口对象
      */
-    onBulletHitEnemyBody(data:IBulletDataObject){   
-        // const bltAngle:number = data.bulletAngle;  // 子弹角度（已注释）
-        // const bltObj:BulletObject = data.bulletObject;  // 子弹对象（已注释）
-        // const enemyObject:EnemyObject = data.enemyObject;  // 敌人对象（已注释）
-
+    onBulletHitEnemyBody(data:IBulletDataObject){
         // 使用解构赋值获取子弹角度、子弹对象和敌人身体
         const {bulletAngle, bulletObject:bltObj, enemyBody} = data;
         // 获取子弹节点的位置坐标
@@ -91,23 +113,16 @@ export class BulletControl extends Component {
         // console.log(ps);  // 输出粒子系统信息（已注释）
         console.log("bulletControl onBulletHitEnemyBody");  // 输出日志信息
         // 延迟执行销毁操作
+
+        
+        enemyBody.beaten();
+
         setTimeout(() => {
             particleNode.destroy();  // 销毁粒子特效节点
             // 静态子弹部分（已注释）
-            enemyBody.node.parent.destroy();
+            // enemyBody.node.parent.parent.destroy();
+            if(enemyBody.life<=0) enemyBody.del();
         }, 1000);
-
-        //静态子弹
-        // const blt = instantiate(this.bulletStaticPrefab);
-        // blt.setPosition(x,y,z);
-        // blt.setRotationFromEuler(0,0,bltAngle);
-        // this.bulletCylinderStaticBox.addChild(blt);
-
-        // setTimeout(() => {
-        //     blt.destroy();
-        // }, 2000);
-
-
 
     }
     /**
@@ -119,13 +134,18 @@ export class BulletControl extends Component {
         const bltObj:BulletObject = data.bulletObject;
         const {x,y,z} = bltObj.node.getPosition();
 
-
         const blt = instantiate(this.bulletStaticPrefab);
         blt.setPosition(x,y,z);
         blt.setScale(1,1,1);
         blt.setRotationFromEuler(0,0,bltAngle);
         this.bulletCylinderStaticBox.addChild(blt);
 
+        //粒子特效
+        // const particleNode:ParticleSystem = blt.getComponentInChildren(ParticleSystem) as ParticleSystem;
+        const particleNode:ParticleSystem = blt.getChildByName('flyLightParticle').getComponent(ParticleSystem) as ParticleSystem;
+        particleNode.stop();
+
+        
         setTimeout(() => {
             blt.destroy();
         }, 2000);

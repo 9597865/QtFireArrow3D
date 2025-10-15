@@ -24,6 +24,12 @@ export class BulletObject extends Vehicle {
 
     private lv:Vec3 = new Vec3();
 
+    //攻击力，伤害值
+    private _attackLife:number = 1;
+    //武器样式
+    private _weaponStyle:number = 0;
+
+
     onLoad(): void {
         // this.rigidBody = this.getComponent(RigidBody);
         // console.log('BulletObject onLoad')
@@ -36,6 +42,7 @@ export class BulletObject extends Vehicle {
         this.mass = 0.1;
         this.maxSpeed = 0.5;
     
+        
     }
 
     // update(deltaTime: number) {
@@ -46,6 +53,14 @@ export class BulletObject extends Vehicle {
         // console.log(' run SteeredVehicle constructor')
         super();
         this._steeringForce = v3 || new Vec3()
+    }
+
+
+    public get attackLife():number{
+        return this._attackLife;
+    }
+    public set attackLife(value:number){
+        this._attackLife = value;
     }
 
     public set skinObject(value:Node){
@@ -159,6 +174,7 @@ export class BulletObject extends Vehicle {
         // const angle = Math.atan2(this.velocity.y, this.velocity.x) * 180 / Math.PI + 180;
         // this._skinObject.setRotationFromEuler(new Vec3(angle,0,0));
     }
+    
     public getBulletAngle(){
         const angle = Math.atan2(this.velocity.y, this.velocity.x) * 180 / Math.PI + 90 ;
         return angle;
