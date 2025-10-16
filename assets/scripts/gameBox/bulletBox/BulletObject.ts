@@ -1,9 +1,10 @@
-import { _decorator, Collider, ColliderComponent, Component, ICollisionEvent, Node, RigidBody, Vec3 } from 'cc';
+import { _decorator, Collider, ColliderComponent, Component, Node, RigidBody, Vec3 } from 'cc';
 import { Vehicle } from '../vehicleBox/Vehicle';
+import { IBullet } from '../interface/IBullet';
 const { ccclass, property } = _decorator;
 
 @ccclass('BulletObject')
-export class BulletObject extends Vehicle {
+export class BulletObject extends Vehicle implements IBullet {
     //加速度
     private _accForce:number = 0.2;
     //阻力
@@ -25,10 +26,16 @@ export class BulletObject extends Vehicle {
     private lv:Vec3 = new Vec3();
 
     //攻击力，伤害值
-    private _attackLife:number = 1;
+    // private _attackLife:number = 1;
     //武器样式
     private _weaponStyle:number = 0;
 
+    
+    private _bulletAngle:number = 0;
+    private _bulletSpeed:number = 0;
+    private _bulletDamage:number = 1;
+    private _bulletType:string = 'normal';
+    
 
     onLoad(): void {
         // this.rigidBody = this.getComponent(RigidBody);
@@ -56,13 +63,39 @@ export class BulletObject extends Vehicle {
     }
 
 
-    public get attackLife():number{
-        return this._attackLife;
+    // public get attackLife():number{
+    //     return this._attackLife;
+    // }
+    // public set attackLife(value:number){
+    //     this._attackLife = value;
+    // }
+    public get bulletAngle():number{
+        return this._bulletAngle;
     }
-    public set attackLife(value:number){
-        this._attackLife = value;
+    public set bulletAngle(value:number){
+        this._bulletAngle = value;
     }
 
+    public get bulletSpeed():number{
+        return this._bulletSpeed;
+    }
+    public set bulletSpeed(value:number){
+        this._bulletSpeed = value;
+    }
+
+    public get bulletDamage():number{
+        return this._bulletDamage;
+    }
+    public set bulletDamage(value:number){
+        this._bulletDamage = value;
+    }
+
+    public get bulletType():string{
+        return this._bulletType;
+    }
+    public set bulletType(value:string){
+        this._bulletType = value;
+    }
     public set skinObject(value:Node){
         this._skinObject = value;
     }

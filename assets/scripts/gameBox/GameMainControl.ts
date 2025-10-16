@@ -89,7 +89,7 @@ export class GameMainControl extends Component {
         AppNotification.emit(GameEvent.EVENT_STAGE_MOUSE_END, {event});
         // console.log("onTouchEnd");
 
-        this.bulletCtrl.fire(this.player);
+        // this.bulletCtrl.fire(this.player);
     }
     
     onDisable () {

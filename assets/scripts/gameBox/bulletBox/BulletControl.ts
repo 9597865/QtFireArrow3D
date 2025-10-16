@@ -42,6 +42,9 @@ export class BulletControl extends Component {
         AppNotification.on(GameEvent.EVENT_BULLET_HIT_ENEMYOBJECT_BODY, this.onBulletHitEnemyBody, this);
         AppNotification.on(GameEvent.EVENT_BULLET_HIT_FLOOR, this.onBulletHitFloor, this);
         AppNotification.on(GameEvent.EVENT_BULLET_HIT_ENEMY_FLOOR, this.onBulletHitEnemyStanderFloor, this);
+
+
+
         
     }
 
@@ -79,8 +82,8 @@ export class BulletControl extends Component {
         // console.log(ps);  // 输出粒子系统信息（已注释）
         console.log("bulletControl onBulletHitEnemyHead");  // 输出日志信息
         //
-        bltObj.attackLife = 12;
-        enemyHead.beaten(bltObj.attackLife);
+        bltObj.bulletDamage = 12;
+        enemyHead.beaten(bltObj.bulletDamage);
         // 延迟执行销毁操作
         setTimeout(() => {
             particleNode.destroy();  // 销毁粒子特效节点
@@ -113,7 +116,6 @@ export class BulletControl extends Component {
         // console.log(ps);  // 输出粒子系统信息（已注释）
         console.log("bulletControl onBulletHitEnemyBody");  // 输出日志信息
         // 延迟执行销毁操作
-
         
         enemyBody.beaten();
 

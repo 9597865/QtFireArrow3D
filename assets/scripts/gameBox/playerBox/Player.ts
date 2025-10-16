@@ -1,18 +1,29 @@
 import { _decorator, Component, Node, Vec3 } from 'cc';
+import { AppNotification } from '../../qt_cocos_ts/event/AppNotification';
+import { GamePlayerEvent } from '../events/GamePlayerEvent';
+import { BulletControl } from '../bulletBox/BulletControl';
+import { EuipmentControl } from '../euipmentBox/EuipmentControl';
 const { ccclass, property } = _decorator;
 
 @ccclass('Player')
 export class Player extends Component {
 
+    @property(EuipmentControl)
+    euipment: EuipmentControl = null;
+
     gunObj: Node = null;
 
     start() {
-        // this.settingPlayer();
-        // console.log(this.node.eulerAngles);
-
-        this.gunObj = this.node.getChildByName('gunBox');
+        this.playerInit();
+        this.setEvent()
     }
 
+    playerInit(){
+        this.gunObj = this.node.getChildByName('gunBox');
+    }
+    setEvent(){
+        AppNotification.on(GamePlayerEvent.EVENT_PLYAYER_FIRE, this.fire, this);
+    }
     // update(deltaTime: number) {
     gameTick(deltaTime: number) {
         
@@ -31,7 +42,8 @@ export class Player extends Component {
     }
     public fire(){
         console.log("player fire");
-        
+        //挂靠武器类型
+
     }
     public settingPlayer(){
         // setTimeout(() => {

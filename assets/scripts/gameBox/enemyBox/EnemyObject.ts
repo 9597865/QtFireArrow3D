@@ -27,14 +27,16 @@ export class EnemyObject extends Component {
 
     /**
      * 处理角色受到伤害的方法
-     * @param _attackLife 攻击方造成的伤害值
+     * @param _damage 攻击方造成的伤害值
      */
-    public beaten(_attackLife:number = 1){
-        this.node.setScale(1.2, 1.2, 1.2);
-        setTimeout(() => {
-            this.node.setScale(1, 1, 1);
-        }, 100);
-        this._life -= _attackLife;
+    public beaten(_damage:number = 1){
+        if(_damage>1 || this._life==1){
+            this.node.setScale(1.2, 1.2, 1.2);
+            setTimeout(() => {
+                this.node.setScale(1, 1, 1);
+            }, 100);
+        }
+        this._life -= _damage;
         if(this._life <= 0){
            this._life = 0;
         }

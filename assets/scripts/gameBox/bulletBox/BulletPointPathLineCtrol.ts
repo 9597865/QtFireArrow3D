@@ -4,6 +4,7 @@ import { GameEvent } from '../events/GameEvent';
 import { getPointsBetweenTwoPoints } from '../../qt_cocos_ts/utils/PointCalculator';
 import { Player } from '../playerBox/Player';
 import { QtMath } from '../../qt_cocos_ts/utils/QtMath';
+import { GamePlayerEvent } from '../events/GamePlayerEvent';
 const { ccclass, property } = _decorator;
 
 @ccclass('BulletPointPathLineCtrol')
@@ -73,6 +74,9 @@ export class BulletPointPathLineCtrol extends Component {
     onStageMouseEnd(data:any){
         console.log("BulletPointPathLineCtrol onStageMouseEnd");
         // this.node.removeAllChildren();
+
+        AppNotification.emit(GamePlayerEvent.EVENT_PLYAYER_FIRE,{});
+        
     }
 
     update(deltaTime: number) {
