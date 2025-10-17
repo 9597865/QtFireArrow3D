@@ -1,21 +1,16 @@
 import { _decorator, Component, Node } from 'cc';
+import { EquipmentRarity, EquipmentType } from '../enums/GameEnums';
 const { ccclass, property } = _decorator;
 
-// 装备类型（武器/头盔/ armor/饰品等，枚举类型）
-enum EquipmentType { Weapon, Helmet, ChestArmor, LegArmor, Ring, Amulet }
 
-// 属性类型（攻击/防御/血量等，枚举类型）
-enum AttributeType { Attack, Defense, Health, Mana, CriticalChance }
 
-// 稀有度（普通/稀有/史诗/传说，影响属性上限）
-enum EquipmentRarity { Common, Rare, Epic, Legendary }
 
 @ccclass('EuiqmentObject')
 export class EuiqmentObject extends Component {
 
     public id:number = 0;               // 唯一标识（用于数据库/配置表索引）
-    public euiqmentName:string = "";          // 装备名称
-    public euiqmentType:EquipmentType;   // 类型（武器/头盔/ armor/饰品等，枚举类型）
+    public eqName:string = "";          // 装备名称
+    public eqType:EquipmentType;   // 类型（武器、头盔、铠甲、靴子）
     public rarity:EquipmentRarity; // 稀有度（普通/稀有/史诗/传说，影响属性上限）; 
     public levelRequirement:number = 0; // 佩戴等级要求
     public durability:number = 0;       // 耐久度（0时失效，可修复）

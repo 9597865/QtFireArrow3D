@@ -23,7 +23,7 @@ export class BulletObject extends Vehicle implements IBullet {
     // 刚体组件
     // private rigidBody: RigidBody | null = null;
 
-    private lv:Vec3 = new Vec3();
+    // private lv:Vec3 = new Vec3();
 
     //攻击力，伤害值
     // private _attackLife:number = 1;
@@ -33,7 +33,7 @@ export class BulletObject extends Vehicle implements IBullet {
     
     private _bulletAngle:number = 0;
     private _bulletSpeed:number = 0;
-    private _bulletDamage:number = 1;
+    private _bulletAttack:number = 1;
     private _bulletType:string = 'normal';
     
 
@@ -83,11 +83,11 @@ export class BulletObject extends Vehicle implements IBullet {
         this._bulletSpeed = value;
     }
 
-    public get bulletDamage():number{
-        return this._bulletDamage;
+    public get bulletAttack():number{
+        return this._bulletAttack;
     }
-    public set bulletDamage(value:number){
-        this._bulletDamage = value;
+    public set bulletAttack(value:number){
+        this._bulletAttack = value;
     }
 
     public get bulletType():string{

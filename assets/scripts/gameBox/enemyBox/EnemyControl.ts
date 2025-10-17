@@ -15,9 +15,7 @@ export class enemyControl extends Component {
     start() {
 
         this.enemyLayerBox = find("GameMainBox/gameBox/enemyBox/enemyControl/enemyLayerBox");
-        console.log("enemyLayerBox",this.enemyLayerBox);
-
-
+        //
         let positionArrList: Vec3[] = [new Vec3(10,4,0), new Vec3(10,6,0), new Vec3(6,2,0)]
         let len:number = positionArrList.length;
         for(let i=0; i<len; i++){
@@ -31,7 +29,7 @@ export class enemyControl extends Component {
             // enemyObj.setRotationFromEuler(0,0,bltAngle);
             this.enemyLayerBox.addChild(enemyObj);
             // console.log(enemyObj.getPosition());
-            console.log(v3Pos);
+            // console.log(v3Pos);
         }
         
 

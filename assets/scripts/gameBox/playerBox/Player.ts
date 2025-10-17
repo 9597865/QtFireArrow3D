@@ -3,13 +3,31 @@ import { AppNotification } from '../../qt_cocos_ts/event/AppNotification';
 import { GamePlayerEvent } from '../events/GamePlayerEvent';
 import { BulletControl } from '../bulletBox/BulletControl';
 import { EuipmentControl } from '../euipmentBox/EuipmentControl';
+import { IBaseAttributes } from '../interface/IBaseAttributes';
 const { ccclass, property } = _decorator;
 
 @ccclass('Player')
-export class Player extends Component {
+export class Player extends Component implements IBaseAttributes{
 
     @property(EuipmentControl)
-    euipment: EuipmentControl = null;
+    euipmentCtl: EuipmentControl = null;
+
+    @property
+    // 基础生命值
+    private _hp: number = 100;
+    @property
+    // 基础魔法值
+    private _mp: number = 100;
+    @property
+    // 基础攻击力
+    private _attack: number = 10;
+    @property
+    // 基础防御力
+    private _defense: number = 5;
+    @property
+    // 基础速度
+    private _speed: number = 1;
+
 
     gunObj: Node = null;
 
@@ -43,7 +61,7 @@ export class Player extends Component {
     public fire(){
         console.log("player fire");
         //挂靠武器类型
-
+        // this.euipmentCtl.
     }
     public settingPlayer(){
         // setTimeout(() => {
@@ -67,6 +85,38 @@ export class Player extends Component {
     public getGunAngle(): number{
         if (!this.gunObj) return 0;
         return this.gunObj.eulerAngles.z;
+    }
+
+    public get hp(): number {
+    return this._hp;
+}
+    public get mp(): number {
+        return this._mp;
+    }
+    public get attack(): number {
+        return this._attack;
+    }
+    public get defense(): number {
+        return this._defense;
+    }
+    public get speed(): number {
+        return this._speed;
+    }
+
+    public set hp(value: number) {
+        this._hp = value;
+    }
+    public set mp(value: number) {
+        this._mp = value;
+    }
+    public set attack(value: number) {
+        this._attack = value;
+    }
+    public set defense(value: number) {
+        this._defense = value;
+    }
+    public set speed(value: number) {
+        this._speed = value;
     }
 }
 

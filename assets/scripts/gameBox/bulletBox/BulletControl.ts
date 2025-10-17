@@ -54,7 +54,6 @@ export class BulletControl extends Component {
         for (const bullet of this.bulletLayerListArr) {
             const blt:Node = bullet as Node;
             const bltObj:BulletObject = blt.getComponent('BulletObject') as BulletObject;
-            // console.log(bltObj)
             if(bltObj.velocity!=Vec3.ZERO){
                bltObj.gameTick(deltaTime);
             }
@@ -80,10 +79,10 @@ export class BulletControl extends Component {
         const ps:ParticleSystem = particleNode.getComponent(ParticleSystem) as ParticleSystem;
         ps.play();
         // console.log(ps);  // 输出粒子系统信息（已注释）
-        console.log("bulletControl onBulletHitEnemyHead");  // 输出日志信息
+        // console.log("bulletControl onBulletHitEnemyHead");  // 输出日志信息
         //
-        bltObj.bulletDamage = 12;
-        enemyHead.beaten(bltObj.bulletDamage);
+        bltObj.bulletAttack = 12;
+        enemyHead.beaten(bltObj.bulletAttack);
         // 延迟执行销毁操作
         setTimeout(() => {
             particleNode.destroy();  // 销毁粒子特效节点
