@@ -4,6 +4,8 @@ import { GamePlayerEvent } from '../events/GamePlayerEvent';
 import { BulletControl } from '../bulletBox/BulletControl';
 import { EuipmentControl } from '../euipmentBox/EuipmentControl';
 import { IBaseAttributes } from '../interface/IBaseAttributes';
+import { IPlayerWeapon } from '../interface/IPlayerWeapon';
+import { PlayerWeapon } from './PlayerWeapon';
 const { ccclass, property } = _decorator;
 
 @ccclass('Player')
@@ -28,16 +30,24 @@ export class Player extends Component implements IBaseAttributes{
     // 基础速度
     private _speed: number = 1;
 
+    private _playerWeaponTool:IPlayerWeapon = null;
+    private _playerWeapon: PlayerWeapon = null;
 
     gunObj: Node = null;
 
     start() {
         this.playerInit();
-        this.setEvent()
+        this.setEvent();
     }
 
     playerInit(){
+
         this.gunObj = this.node.getChildByName('gunBox');
+
+
+        this._playerWeapon = new PlayerWeapon;
+        this._playerWeapon.player = this;
+        
     }
     setEvent(){
         AppNotification.on(GamePlayerEvent.EVENT_PLYAYER_FIRE, this.fire, this);
@@ -62,6 +72,10 @@ export class Player extends Component implements IBaseAttributes{
         console.log("player fire");
         //挂靠武器类型
         // this.euipmentCtl.
+        if (!this._playerWeapon) return;
+        const data = this.euipmentCtl.euipmentDataListMap.get('weapon');
+        // this._playerWeapon.fire(data);
+        this._playerWeapon.fire(data);
     }
     public settingPlayer(){
         // setTimeout(() => {
