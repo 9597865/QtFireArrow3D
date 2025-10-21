@@ -19,8 +19,6 @@ export class BulletControl extends Component {
     @property([Prefab])
     bulletParticleArr: Prefab[] = [];
 
-    private totalTime:number = 0;
-
     bulletLayerBox: Node = null;
     bulletParticleBox: Node = null;
     bulletCylinderStaticBox: Node = null;
@@ -43,23 +41,12 @@ export class BulletControl extends Component {
         AppNotification.on(GameEvent.EVENT_BULLET_HIT_FLOOR, this.onBulletHitFloor, this);
         AppNotification.on(GameEvent.EVENT_BULLET_HIT_ENEMY_FLOOR, this.onBulletHitEnemyStanderFloor, this);
 
-
-
         
     }
 
     // update(deltaTime: number) {
     gameTick(deltaTime: number) {
-        this.totalTime +=deltaTime;
-        for (const bullet of this.bulletLayerListArr) {
-            const blt:Node = bullet as Node;
-            const bltObj:BulletObject = blt.getComponent('BulletObject') as BulletObject;
-            if(bltObj.velocity!=Vec3.ZERO){
-               bltObj.gameTick(deltaTime);
-            }
-        } 
-
-        this.destoryBullet();
+        
     }
 
     onBulletHitEnemyHead(data:IBulletDataObject){
@@ -187,42 +174,6 @@ export class BulletControl extends Component {
         //     blt.destroy();
         // }, 2000);
     }
-    destoryBullet(){
-        if(Math.round(this.totalTime)%5==0){
-            // console.log('========')
-            //删除 跟踪 小炮弹
-            if(this.bulletLayerListArr.length>0){
-                this.bulletLayerListArr.forEach((child,index)=>{
-                    let blt:Node = child as Node;
-                    const bltObj:BulletObject = blt.getComponent('BulletObject') as BulletObject;
-                    // console.log(bltObj.node.active) 
-                    // if( !bltObj.node.active || bltObj.velocity == Vec3.ZERO ){
-                    if( !bltObj.node.active ){
-                        bltObj.node.destroy();
-                        this.bulletLayerListArr.splice(index,1);
-                        blt = null;
-                    }
-                })
-            }
-        }
-    }
-    public fire(player:Player){
-        // console.log("bulletControl fire");
-        const blt = instantiate(this.bulletPrefab);
-        this.bulletLayerBox.addChild(blt);
-        blt.setRotationFromEuler(0,0,player.getGunAngle());
-        //
-        const bltObj:BulletObject = blt.getComponent('BulletObject') as BulletObject;
-        const velocity = QtMath.convertSpeedAngleToVector3(0.2,player.getGunAngle()+90);
-        bltObj.name = 'bullet';
-        bltObj.velocity = velocity;
-        bltObj.position = player.node.getPosition();
-        bltObj.maxForce = 10;
-        bltObj.maxSpeed = 1;
-        bltObj.mass = 5;
-        bltObj.skinObject = blt;
-        //
-        this.bulletLayerListArr.push(blt);
-    }
+    
 }
 

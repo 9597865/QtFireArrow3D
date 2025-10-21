@@ -32,11 +32,11 @@ export class GameMainControl extends Component {
     start() {
         
         this.pointPathLineBox = find("GameMainBox/gameBox/bulletBox").getChildByName("bulletPointPathLineBox"); // this.node.getChildByName("bulletPointPathLineBox");
-        let pointPathObject = this.pointPathLineBox.getComponent("BulletPointPathLineCtrol");
+        // let pointPathObject = this.pointPathLineBox.getComponent("BulletPointPathLineCtrol");
 
         this.enemyBox = find("GameMainBox/gameBox/enemyBox"); // this.node.getChildByName("enemyBox");
         
-        console.log("enemyBox",this.enemyBox);
+        // console.log("enemyBox",this.enemyBox);
     }
 
     update(deltaTime: number) {

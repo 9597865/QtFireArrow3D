@@ -4,5 +4,5 @@ export interface IPlayerWeapon<T = void>{
     // euiqId:number,
     // euiqType:string,
     player:Player
-    fire<T>(data:T):void,
+    attackTarget<T>(data:T):void,
 }

@@ -54,7 +54,7 @@ export class Player extends Component implements IBaseAttributes{
     }
     // update(deltaTime: number) {
     gameTick(deltaTime: number) {
-        
+       this._playerWeapon.gameTick(deltaTime);
     }
 
     onCollisionEnter(other: any, self: any) {
@@ -68,6 +68,8 @@ export class Player extends Component implements IBaseAttributes{
     onCollisionExit(other: any, self: any) {
         console.log("collision exit");
     }
+
+    
     public fire(){
         console.log("player fire");
         //挂靠武器类型
@@ -75,7 +77,7 @@ export class Player extends Component implements IBaseAttributes{
         if (!this._playerWeapon) return;
         const data = this.euipmentCtl.euipmentDataListMap.get('weapon');
         // this._playerWeapon.fire(data);
-        this._playerWeapon.fire(data);
+        this._playerWeapon.attackTarget(data);
     }
     public settingPlayer(){
         // setTimeout(() => {
