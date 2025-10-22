@@ -109,7 +109,7 @@ export class GameMainControl extends Component {
         // console.log("btn click2");
         //开火
         // this.player.fire();
-        this.bulletCtrl.fire(this.player);
+        // this.bulletCtrl.fire(this.player);
     }
 }
 

@@ -6,20 +6,10 @@ import { QtMath } from '../../qt_cocos_ts/utils/QtMath';
 const { ccclass, property } = _decorator;
 
 @ccclass('PlyaerWeapon')
-export class PlayerWeapon extends Component implements IPlayerWeapon{
-
-    private _bulletPrefab: Prefab;
-    private _bulletLayerBox: Node;
-    private _bulletPointPathLineBox: Node;
-    //
-    private _bulletParticleArr: Prefab[] = [];
-    private _bulletLayerListArr: Node[] = [];
-    //
-    private _player: Player;
-    private _totalTime:number = 0;
-    //
+export class PlayerWeapon extends Component{
     // 攻击冷却计时器
     private _coolDownTimer = 0;
+
     attack = 10; // 攻击力
     attackRange = 1; // 攻击范围
     attackSpeed = 1; // 攻击间隔（秒）
@@ -53,58 +43,21 @@ export class PlayerWeapon extends Component implements IPlayerWeapon{
         // const bundle = new Promise<AssetManager.Bundle>((resolve, reject) => {
         // assetManager.loadBundle('gameAssets', (err, bundle) => console.log(bundle));
         // assetManager.loadBundle('gameAssets/bulletObject', (err, bundle) => console.log(bundle));
-        this._bulletPointPathLineBox = find("GameMainBox/gameBox/bulletBox").getChildByName("bulletPointPathLineBox"); 
-        this._bulletLayerBox = find("GameMainBox/gameBox/bulletBox").getChildByName("bulletLayerBox"); 
         
-        // 动态加载预制体
-        resources.load("bulletBox/bulletObject", Prefab, (err, prefab) => {
-            if (err) {
-                console.error('Failed to load prefab:', err);
-                return;
-            }
-            this._bulletPrefab = prefab;
-        });
         
     }
 
     gameTick(deltaTime: number) {
-        this._totalTime +=deltaTime;
 
         // 更新冷却时间
         if (this._coolDownTimer > 0) {
             this._coolDownTimer -= deltaTime;
         }
 
-        for (const bullet of this._bulletLayerListArr) {
-            const blt:Node = bullet as Node;
-            const bltObj:BulletObject = blt.getComponent('BulletObject') as BulletObject;
-            if(bltObj.velocity!=Vec3.ZERO){
-               bltObj.gameTick(deltaTime);
-            }
-        } 
-        //
-        this.destoryBullet();
+        
     }
 
-    destoryBullet(){
-        if(Math.round(this._totalTime)%5==0){
-            // console.log('========')
-            //删除 跟踪 小炮弹
-            if(this._bulletLayerListArr.length>0){
-                this._bulletLayerListArr.forEach((child,index)=>{
-                    let blt:Node = child as Node;
-                    const bltObj:BulletObject = blt.getComponent('BulletObject') as BulletObject;
-                    // console.log(bltObj.node.active) 
-                    // if( !bltObj.node.active || bltObj.velocity == Vec3.ZERO ){
-                    if( !bltObj.node.active ){
-                        bltObj.node.destroy();
-                        this._bulletLayerListArr.splice(index,1);
-                        blt = null;
-                    }
-                })
-            }
-        }
-    }
+    
     
     // attackTarget(target: Node): boolean {
     //     if (this._coolDownTimer > 0) return false; // 冷却中无法攻击
@@ -119,8 +72,8 @@ export class PlayerWeapon extends Component implements IPlayerWeapon{
      */
     attackTarget(data:Object) {
         // TODO: fire
-        console.log('PlyaerWeapon fire========'); // 输出攻击日志
-        console.log(data); // 输出攻击数据
+        // console.log('PlyaerWeapon fire========'); // 输出攻击日志
+        // console.log(data); // 输出攻击数据
         // console.log(this.player); // 注释掉的玩家日志
 
         // 检查冷却时间，如果冷却时间大于0则无法攻击
@@ -128,29 +81,25 @@ export class PlayerWeapon extends Component implements IPlayerWeapon{
         // 重置冷却时间并播放攻击动画
         this._coolDownTimer = this.attackSpeed;
         this.playAttackAnim();
-        // return true;
-
-        // 检查子弹预制体是否存在，不存在则报错并返回
-        if(this._bulletPrefab == null) {
-            console.error('bulletPrefab is null'); // 输出错误日志
-            return;
-        }
+        
         // 实例化子弹并添加到子弹层
-        const blt = instantiate(this._bulletPrefab);
-        this._bulletLayerBox.addChild(blt);
-        blt.setRotationFromEuler(0,0,this.player.getGunAngle()); // 设置子弹旋转角度
-        // 获取子弹组件并设置子弹属性
-        const bltObj:BulletObject = blt.getComponent('BulletObject') as BulletObject;
-        const velocity = QtMath.convertSpeedAngleToVector3(0.2,this.player.getGunAngle()+90); // 计算子弹速度向量
-        bltObj.name = 'bullet'; // 设置子弹名称
-        bltObj.velocity = velocity; // 设置子弹速度
-        bltObj.position = this.player.node.getPosition(); // 设置子弹初始位置
-        bltObj.maxForce = 10;
-        bltObj.maxSpeed = 1;
-        bltObj.mass = 5;
-        bltObj.skinObject = blt;
-        //
-        this._bulletLayerListArr.push(blt);
+        // const blt = instantiate(this._bulletPrefab);
+        // this._bulletLayerBox.addChild(blt);
+        // blt.setRotationFromEuler(0,0,this.player.getGunAngle()); // 设置子弹旋转角度
+        // // 获取子弹组件并设置子弹属性
+        // const bltObj:BulletObject = blt.getComponent('BulletObject') as BulletObject;
+        // const velocity = QtMath.convertSpeedAngleToVector3(0.2,this.player.getGunAngle()+90); // 计算子弹速度向量
+        // bltObj.name = 'bullet'; // 设置子弹名称
+        // bltObj.velocity = velocity; // 设置子弹速度
+        // bltObj.position = this.player.node.getPosition(); // 设置子弹初始位置
+        // bltObj.maxForce = 10;
+        // bltObj.maxSpeed = 1;
+        // bltObj.mass = 5;
+        // bltObj.skinObject = blt;
+        // //
+        // this._bulletLayerListArr.push(blt);
+
+        return true;
     }
     // 播放攻击动画（子类可重写）
     protected playAttackAnim() {
@@ -161,11 +110,9 @@ export class PlayerWeapon extends Component implements IPlayerWeapon{
     // 武器特效（如剑气、子弹，子类实现）
     protected spawnEffect() {}
 
-    public set player(player: Player) {
-        this._player = player;
-    }
-    public get player(): Player {
-        return this._player;
-    }
+    
+
+
+    
 }
 

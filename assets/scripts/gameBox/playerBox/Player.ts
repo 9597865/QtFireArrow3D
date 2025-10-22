@@ -1,4 +1,4 @@
-import { _decorator, Component, Node, Vec3 } from 'cc';
+import { _decorator, Component, EventKeyboard, Input, input, KeyCode, Node, Vec3 } from 'cc';
 import { AppNotification } from '../../qt_cocos_ts/event/AppNotification';
 import { GamePlayerEvent } from '../events/GamePlayerEvent';
 import { BulletControl } from '../bulletBox/BulletControl';
@@ -6,6 +6,7 @@ import { EuipmentControl } from '../euipmentBox/EuipmentControl';
 import { IBaseAttributes } from '../interface/IBaseAttributes';
 import { IPlayerWeapon } from '../interface/IPlayerWeapon';
 import { PlayerWeapon } from './PlayerWeapon';
+import { ArrowBow } from './ArrowBow';
 const { ccclass, property } = _decorator;
 
 @ccclass('Player')
@@ -29,12 +30,15 @@ export class Player extends Component implements IBaseAttributes{
     @property
     // 基础速度
     private _speed: number = 1;
-
-    private _playerWeaponTool:IPlayerWeapon = null;
-    private _playerWeapon: PlayerWeapon = null;
-
+    //
     gunObj: Node = null;
-
+    // 持握武器的节点（如手部骨骼）
+    weaponHolder: Node = null;
+    // 武器列表（预制体，在编辑器中拖入）
+    weaponPrefabs: Node[] = []; // 存放剑、弓等武器预制体
+    //
+    // 当前装备的武器
+    private _currentWeapon: ArrowBow = null;
     start() {
         this.playerInit();
         this.setEvent();
@@ -43,18 +47,38 @@ export class Player extends Component implements IBaseAttributes{
     playerInit(){
 
         this.gunObj = this.node.getChildByName('gunBox');
-
-
-        this._playerWeapon = new PlayerWeapon;
-        this._playerWeapon.player = this;
+        //
+        this.equipWeapon(0);
         
     }
     setEvent(){
+
         AppNotification.on(GamePlayerEvent.EVENT_PLYAYER_FIRE, this.fire, this);
+
+        // 监听攻击输入
+        input.on(Input.EventType.KEY_DOWN, this.onKeyDown, this);
     }
-    // update(deltaTime: number) {
+    // 攻击输入处理
+    onKeyDown(e: EventKeyboard) {
+        if (e.keyCode === KeyCode.KEY_J && this._currentWeapon) {
+            // 假设目标是距离最近的敌人（实际需通过检测获取）
+            // const target = this.findNearestEnemy();
+            // this._currentWeapon.attackTarget(target);
+        }
+
+        // 按数字键1、2切换武器
+        if (e.keyCode === KeyCode.NUM_0){
+            this.equipWeapon(0);
+        }
+        //
+        if (e.keyCode === KeyCode.NUM_1){
+            //const arrowBowObject = new ArrowBow();
+            this.equipWeapon(1);
+        }
+    }
     gameTick(deltaTime: number) {
-       this._playerWeapon.gameTick(deltaTime);
+        if(!this._currentWeapon) return;
+        this._currentWeapon.gameTick(deltaTime);
     }
 
     onCollisionEnter(other: any, self: any) {
@@ -69,16 +93,45 @@ export class Player extends Component implements IBaseAttributes{
         console.log("collision exit");
     }
 
-    
+   // 装备武器（通过索引切换）
+    equipWeapon(index: number) {
+        // 销毁当前武器
+        if (this._currentWeapon) {
+            this._currentWeapon = null;
+        }
+        switch (index) {
+            // 根据索引选择武器
+            case 0:
+                this._currentWeapon = new ArrowBow;
+                break;
+            case 1:
+                // this._currentWeapon = new Bow;
+                break;
+            case 2:
+                // this._currentWeapon = new Staff;
+                break;
+        }
+        this._currentWeapon.player = this;
+
+        console.log('装备武器：', index);
+        // 实例化新武器
+        // const weaponNode = instantiate(this.weaponPrefabs[index]);
+        // this._currentWeapon = weaponNode.getComponent(Weapon);
+        // this._currentWeapon?.init(this.weaponHolder); // 挂载到持握节点
+    } 
     public fire(){
         console.log("player fire");
+        
         //挂靠武器类型
-        // this.euipmentCtl.
-        if (!this._playerWeapon) return;
+        if (!this._currentWeapon) {
+            console.log("this._currentWeapon is null");
+            return
+        };
         const data = this.euipmentCtl.euipmentDataListMap.get('weapon');
-        // this._playerWeapon.fire(data);
-        this._playerWeapon.attackTarget(data);
+        //
+        this._currentWeapon.attackTarget(data);
     }
+
     public settingPlayer(){
         // setTimeout(() => {
             // this.node.setRotationFromEuler(0, 0, 50);
