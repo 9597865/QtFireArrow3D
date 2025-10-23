@@ -7,6 +7,7 @@ import { IBaseAttributes } from '../interface/IBaseAttributes';
 import { IPlayerWeapon } from '../interface/IPlayerWeapon';
 import { PlayerWeapon } from './PlayerWeapon';
 import { ArrowBow } from './ArrowBow';
+import { ArrowBow2 } from './ArrowBow2';
 const { ccclass, property } = _decorator;
 
 @ccclass('Player')
@@ -38,7 +39,7 @@ export class Player extends Component implements IBaseAttributes{
     weaponPrefabs: Node[] = []; // 存放剑、弓等武器预制体
     //
     // 当前装备的武器
-    private _currentWeapon: ArrowBow = null;
+    private _currentWeapon: IPlayerWeapon = null;
     start() {
         this.playerInit();
         this.setEvent();
@@ -105,7 +106,7 @@ export class Player extends Component implements IBaseAttributes{
                 this._currentWeapon = new ArrowBow;
                 break;
             case 1:
-                // this._currentWeapon = new Bow;
+                this._currentWeapon = new ArrowBow2;
                 break;
             case 2:
                 // this._currentWeapon = new Staff;
