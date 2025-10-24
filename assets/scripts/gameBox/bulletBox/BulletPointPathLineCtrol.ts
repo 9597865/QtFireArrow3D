@@ -17,6 +17,8 @@ export class BulletPointPathLineCtrol extends Component {
     private player:Player = null;
     // 
     private pointPathLineListArr:Node[] = [];
+    //鼠标滑动的力度
+    private _force:number = 0;
     start() {
         AppNotification.on(GameEvent.EVENT_STAGE_MOUSE_START, this.onStageMouseStart, this);
         AppNotification.on(GameEvent.EVENT_STAGE_MOUSE_MOVE, this.onStageMouseMove, this);
@@ -36,10 +38,11 @@ export class BulletPointPathLineCtrol extends Component {
     }
 
     onStageMouseStart(data:any){
-        console.log("BulletPointPathLineCtrol onStageMouseStart");
+        // console.log("BulletPointPathLineCtrol onStageMouseStart");
+        // this._force = 0;
     }
     onStageMouseMove(data:any){
-        console.log("BulletPointPathLineCtrol onStageMouseMove");
+        // console.log("BulletPointPathLineCtrol onStageMouseMove");
         //console.log(data.event.getLocation());
         //console.log(data.event.getUILocation());
         //console.log(this.player.node.getPosition());
@@ -53,6 +56,7 @@ export class BulletPointPathLineCtrol extends Component {
         let p2:Vec3 = this.cameraObj.screenToWorld(data.event.getLocation().toVec3()); // new Vec3(2,2,2);
         let p2Local:Vec3 = this.uiTransform.convertToNodeSpaceAR(p2);
         p2Local.z = 0;
+
 
 
         getPointsBetweenTwoPoints(p1,p2Local,10).forEach((v3:Vec3,index:number)=>{
@@ -69,13 +73,21 @@ export class BulletPointPathLineCtrol extends Component {
         const targetAngle = Math.atan2(playerPos.y, playerPos.x);
         let targetDegree = QtMath.radiansToDegrees(targetAngle) + 90;
         this.player.setGunAngle(targetDegree);
+
+        //鼠标，触摸，力度为距离
+        // console.log("BulletPointPathLineCtrol onStageMouseMove");
+        // console.log(playerPos.length());
+        this._force = Math.round(playerPos.length());
+
         
     }
     onStageMouseEnd(data:any){
-        console.log("BulletPointPathLineCtrol onStageMouseEnd");
+        // console.log("BulletPointPathLineCtrol onStageMouseEnd");
         // this.node.removeAllChildren();
 
-        AppNotification.emit(GamePlayerEvent.EVENT_PLYAYER_FIRE,{});
+        AppNotification.emit(GamePlayerEvent.EVENT_PLYAYER_FIRE,{force:Math.round(this._force/18*100)/100});
+
+        // this._force = 0;
         
     }
 

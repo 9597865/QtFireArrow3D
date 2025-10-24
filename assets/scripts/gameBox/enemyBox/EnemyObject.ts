@@ -43,7 +43,10 @@ export class EnemyObject extends Component {
     }
 
     public del(){
-        this.node.destroy();
+        if(this.node) {
+            this.node.destroy();
+            console.log("del this.node", this.node);
+        }
     }
 
     get life():number{

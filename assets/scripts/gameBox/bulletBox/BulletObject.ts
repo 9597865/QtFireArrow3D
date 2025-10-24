@@ -6,7 +6,7 @@ const { ccclass, property } = _decorator;
 @ccclass('BulletObject')
 export class BulletObject extends Vehicle implements IBullet {
     //加速度
-    private _accForce:number = 0.2;
+    // private _accForce:number = 0.2;
     //阻力
     private _resistanceForce:number = 0.001*0.5;
     //射速
@@ -130,9 +130,14 @@ export class BulletObject extends Vehicle implements IBullet {
     public set gravNum(value:number){
         this._gravNum = value;
     }
-
     public get gravNum():number{
         return this._gravNum;
+    }
+    public get gravity():number{
+        return this._gravity;
+    }
+    public set gravity(value:number){
+        this._gravity = value;
     }
     override gameTick(deltaTime: number) {
 

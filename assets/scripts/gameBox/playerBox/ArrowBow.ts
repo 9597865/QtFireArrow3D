@@ -4,6 +4,7 @@ import { BulletObject } from '../bulletBox/BulletObject';
 import { QtMath } from '../../qt_cocos_ts/utils/QtMath';
 import { Player } from './Player';
 import { IPlayerWeapon } from '../interface/IPlayerWeapon';
+import { IPlayerSwipe } from '../interface/IPlayerSwipe';
 const { ccclass, property } = _decorator;
 
 @ccclass('ArrowBow')
@@ -69,32 +70,35 @@ export class ArrowBow extends PlayerWeapon implements IPlayerWeapon {
             }
         }
     }
-
+    clear(): void {
+        if(this._bulletLayerListArr.length<=0) return;
+        this._bulletLayerBox.removeAllChildren();
+        this._bulletLayerListArr = [];
+        return;
+    }
     // 重写攻击逻辑（发射子弹）
     attackTarget(data:Object): boolean {
-        console.log('ArrowBow attackTarget');
+        // console.log('ArrowBow attackTarget');
         const canAttack = super.attackTarget(data);
         if (canAttack) {
-            this.spawnEffect(); // 发射弓箭
+            this.spawnEffect(data); // 发射弓箭
         }
         return canAttack;
     }
     // 生成弓箭特效
-    protected spawnEffect() {
-        // const arrow = instantiate(this.arrowPrefab);
-        // arrow.setParent(this.node.parent);
-        // arrow.setPosition(this.node.position);
-        // // 弓箭飞向目标（可通过向量计算方向）
-        // const dir = target.position.subtract(this.node.position).normalize();
-        // arrow.getComponent("Arrow")?.shoot(dir, this.attack);
+    protected spawnEffect(data:Object):void {
+        const {force} = data
+        console.log(force)
 
+        let fireForce:number = 0.4*force;
         // 实例化子弹并添加到子弹层
         const blt = instantiate(this._bulletPrefab);
         this._bulletLayerBox.addChild(blt);
         blt.setRotationFromEuler(0,0,this.player.getGunAngle()); // 设置子弹旋转角度
         // 获取子弹组件并设置子弹属性
         const bltObj:BulletObject = blt.getComponent('BulletObject') as BulletObject;
-        const velocity = QtMath.convertSpeedAngleToVector3(0.2,this.player.getGunAngle()+90); // 计算子弹速度向量
+        // const velocity = QtMath.convertSpeedAngleToVector3(0.2,this.player.getGunAngle()+90); // 计算子弹速度向量
+        const velocity = QtMath.convertSpeedAngleToVector3(fireForce,this.player.getGunAngle()+90); // 计算子弹速度向量
         bltObj.name = 'bullet'; // 设置子弹名称
         bltObj.velocity = velocity; // 设置子弹速度
         bltObj.position = this.player.node.getPosition(); // 设置子弹初始位置
@@ -102,6 +106,7 @@ export class ArrowBow extends PlayerWeapon implements IPlayerWeapon {
         bltObj.maxSpeed = 1;
         bltObj.mass = 5;
         bltObj.skinObject = blt;
+        bltObj.gravity = 0.98+(1-force);
         //
         this._bulletLayerListArr.push(blt);
     }

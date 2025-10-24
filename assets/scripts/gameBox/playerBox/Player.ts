@@ -8,6 +8,7 @@ import { IPlayerWeapon } from '../interface/IPlayerWeapon';
 import { PlayerWeapon } from './PlayerWeapon';
 import { ArrowBow } from './ArrowBow';
 import { ArrowBow2 } from './ArrowBow2';
+import { IPlayerSwipe } from '../interface/IPlayerSwipe';
 const { ccclass, property } = _decorator;
 
 @ccclass('Player')
@@ -78,7 +79,7 @@ export class Player extends Component implements IBaseAttributes{
         }
     }
     gameTick(deltaTime: number) {
-        if(!this._currentWeapon) return;
+        // if(!this._currentWeapon) return;
         this._currentWeapon.gameTick(deltaTime);
     }
 
@@ -98,6 +99,7 @@ export class Player extends Component implements IBaseAttributes{
     equipWeapon(index: number) {
         // 销毁当前武器
         if (this._currentWeapon) {
+            this._currentWeapon.clear();
             this._currentWeapon = null;
         }
         switch (index) {
@@ -120,15 +122,19 @@ export class Player extends Component implements IBaseAttributes{
         // this._currentWeapon = weaponNode.getComponent(Weapon);
         // this._currentWeapon?.init(this.weaponHolder); // 挂载到持握节点
     } 
-    public fire(){
+    public fire(receiveData:IPlayerSwipe){
         console.log("player fire");
-        
+        // console.log(receiveData.force);
         //挂靠武器类型
         if (!this._currentWeapon) {
             console.log("this._currentWeapon is null");
             return
         };
-        const data = this.euipmentCtl.euipmentDataListMap.get('weapon');
+        const weaponData = this.euipmentCtl.euipmentDataListMap.get('weapon');
+        const data = {
+            force:receiveData.force,
+            weaponData, //武器数据
+        }
         //
         this._currentWeapon.attackTarget(data);
     }

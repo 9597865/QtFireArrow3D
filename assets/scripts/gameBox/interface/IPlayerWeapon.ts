@@ -6,4 +6,5 @@ export interface IPlayerWeapon<T = void>{
     player:Player
     attackTarget<T>(data:T):void,
     gameTick(deltaTime: number):void,
+    clear():void,
 }

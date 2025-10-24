@@ -101,6 +101,7 @@ export class PlayerWeapon extends Component{
 
         return true;
     }
+    
     // 播放攻击动画（子类可重写）
     protected playAttackAnim() {
         // const anim = this.player.getComponent(Animation);
@@ -108,7 +109,7 @@ export class PlayerWeapon extends Component{
     }
 
     // 武器特效（如剑气、子弹，子类实现）
-    protected spawnEffect() {}
+    protected spawnEffect(data:Object) {}
 
     
 
