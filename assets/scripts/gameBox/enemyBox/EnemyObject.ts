@@ -30,18 +30,28 @@ export class EnemyObject extends Component {
      * @param _damage 攻击方造成的伤害值
      */
     public beaten(_damage:number = 1){
-        if(_damage>1 || this._life==1){
-            this.node.setScale(1.2, 1.2, 1.2);
-            setTimeout(() => {
-                this.node.setScale(1, 1, 1);
-            }, 100);
-        }
+        //
+        this.scaleNode(_damage) ;
+        //-------------------------------
         this._life -= _damage;
+        //
         if(this._life <= 0){
            this._life = 0;
         }
     }
-
+    private scaleNode(_damage:number){
+        let scaleNumBig:number = 1.2;
+        let scaleNumSmall:number = 1.02;
+        let scaleNum:number = 1;
+        if(_damage>1 || this._life==1){
+            this.node.setScale(scaleNumBig, scaleNumBig, scaleNumBig);
+        }else{
+            this.node.setScale(scaleNumSmall, scaleNumSmall, scaleNumSmall);
+        }
+        setTimeout(() => {
+            this.node.setScale(scaleNum, scaleNum, scaleNum);
+        }, 100);
+    }
     public del(){
         if(this.node) {
             this.node.destroy();

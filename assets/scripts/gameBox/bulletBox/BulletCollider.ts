@@ -97,62 +97,6 @@ export class BulletCollider extends Component {
         console.log('bulletFab<BoxCollider>----',otherName);
 
 
-        return;
-
-        if(
-            otherName.indexOf('gameFloorCube') != -1 || 
-            otherName.indexOf('enemyCube') != -1 
-            
-        ){
-            
-
-            // this.rigid.clearState();
-            // console.log(nd);
-            // console.log(this.node.components);
-            // this.node.components.forEach((comp)=>{
-            //     if(comp instanceof RigidBody){
-            //         console.log('rigidBody');
-            //         console.log(comp);
-            //         comp.clearVelocity();
-            //         comp.clearState();
-            //         comp.clearForces();
-            //     }
-            // })
-        }
-        //
-        if(
-            // otherName.indexOf('gameFloorCube') != -1 //'gameFloorCube_right<BoxCollider>'
-            otherName == 'gameFloorCube_right<BoxCollider>'
-        ){
-            // const n = e.otherCollider.node;
-            //active 作为标记
-            // n.active = false;
-            //
-            // const bombNode:Node = instantiate(this.bombParticleFab);
-            // bombNode.setPosition(n.position);
-            // this.node.parent.addChild(bombNode);
-            // //
-            // const particle:ParticleSystem = bombNode.getComponent(ParticleSystem);
-            // particle.loop = false;
-            // // 
-            // this.scheduleOnce((dt) => {
-            //     if(n.isValid && !n.active){
-            //         // n.removeAllChildren();
-            //         // n.destroyAllChildren();
-            //         // n.destroy()
-            //     }
-            //     bombNode.destroy();
-            // }, 0.5);
-            //
-            // AppNotification.emit(EventStatus.EVENT_PLANE_BOMB, {position:n.position, otherCollider:e.otherCollider});
-            //
-        }else if(otherName=='gameFloorCube_left<BoxCollider>'){
-        }else if(otherName=='gameFloorCube_bottom<BoxCollider>'){
-        }else if(otherName=='gameFloorCube_top<BoxCollider>'){
-            //
-            // AppNotification.emit(EventStatus.EVENT_HIT_SUN, {});
-        }
-
     }
 }
 

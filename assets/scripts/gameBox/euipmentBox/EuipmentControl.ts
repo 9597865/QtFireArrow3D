@@ -20,7 +20,7 @@ export class EuipmentControl extends Component {
             rarity: "common",
             levelRequirement: 1,
             // criticalChance 暴击率
-            baseAttributes: { damage: 5, criticalChance: 0.01 },
+            baseAttributes: { damage: 1, criticalChance: 0.01 },
             specialEffects: [],
             iconPath: "Icons/Weapons/BronzeSword.png"
         }

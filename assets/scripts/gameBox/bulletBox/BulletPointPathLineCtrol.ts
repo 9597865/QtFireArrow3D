@@ -75,9 +75,8 @@ export class BulletPointPathLineCtrol extends Component {
         this.player.setGunAngle(targetDegree);
 
         //鼠标，触摸，力度为距离
-        // console.log("BulletPointPathLineCtrol onStageMouseMove");
-        // console.log(playerPos.length());
-        this._force = Math.round(playerPos.length());
+        let playerPosLength:number = Math.min(playerPos.length(),18);
+        this._force = Math.round(playerPosLength);
 
         
     }

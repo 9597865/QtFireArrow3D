@@ -86,13 +86,19 @@ export class ArrowBow2 extends PlayerWeapon implements IPlayerWeapon {
     }
     // 生成弓箭特效
     protected spawnEffect(data:Object):void {
+        
         // 实例化子弹并添加到子弹层
         let angle:number = this.player.getGunAngle();
         for (let i = 0; i < 3; i++) {
-           this.shoot(0.2-0.01*i,angle+90-i);
+            this.shoot(i,data);
+            //this.shoot(0.2-0.01*i,angle+90-i);
         }
     }
-    private shoot(bulletSpeed:number=0.2, angle:number=90) {
+    private shoot(i:number,data:Object) {
+        const {force} = data;
+        let fireForce:number = 0.45*force-0.01*i;
+        // let bulletSpeed:number = 0.2-0.01*i;
+        let angle:number = this.player.getGunAngle()+90;
         const blt = instantiate(this._bulletPrefab);
         this._bulletLayerBox.addChild(blt);
         blt.setRotationFromEuler(0,0,this.player.getGunAngle()); // 设置子弹旋转角度
@@ -100,15 +106,15 @@ export class ArrowBow2 extends PlayerWeapon implements IPlayerWeapon {
         const bltObj:BulletObject = blt.getComponent('BulletObject') as BulletObject;
         // 计算子弹速度,角度向量
         // const velocity = QtMath.convertSpeedAngleToVector3(0.4,this.player.getGunAngle()+90); 
-        const velocity = QtMath.convertSpeedAngleToVector3(bulletSpeed,this.player.getGunAngle()+90); 
+        const velocity = QtMath.convertSpeedAngleToVector3(fireForce,angle); 
         bltObj.name = 'bullet'; // 设置子弹名称
         bltObj.velocity = velocity; // 设置子弹速度
         bltObj.position = this.player.node.getPosition(); // 设置子弹初始位置
         bltObj.maxForce = 10;
         bltObj.maxSpeed = 1;
         bltObj.mass = 5;
-        
         bltObj.skinObject = blt;
+        bltObj.gravity = 0.98+(1-force);
         //
         this._bulletLayerListArr.push(blt);
     }

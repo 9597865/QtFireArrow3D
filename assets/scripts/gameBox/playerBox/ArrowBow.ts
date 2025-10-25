@@ -87,10 +87,10 @@ export class ArrowBow extends PlayerWeapon implements IPlayerWeapon {
     }
     // 生成弓箭特效
     protected spawnEffect(data:Object):void {
-        const {force} = data
-        console.log(force)
-
-        let fireForce:number = 0.4*force;
+        const {force,weaponData} = data;
+        let {damage,criticalChance}= weaponData.baseAttributes;
+        let fireForce:number = 0.45*force;
+        let fireAngle:number = this.player.getGunAngle()+90;
         // 实例化子弹并添加到子弹层
         const blt = instantiate(this._bulletPrefab);
         this._bulletLayerBox.addChild(blt);
@@ -98,7 +98,7 @@ export class ArrowBow extends PlayerWeapon implements IPlayerWeapon {
         // 获取子弹组件并设置子弹属性
         const bltObj:BulletObject = blt.getComponent('BulletObject') as BulletObject;
         // const velocity = QtMath.convertSpeedAngleToVector3(0.2,this.player.getGunAngle()+90); // 计算子弹速度向量
-        const velocity = QtMath.convertSpeedAngleToVector3(fireForce,this.player.getGunAngle()+90); // 计算子弹速度向量
+        const velocity = QtMath.convertSpeedAngleToVector3(fireForce,fireAngle); // 计算子弹速度向量
         bltObj.name = 'bullet'; // 设置子弹名称
         bltObj.velocity = velocity; // 设置子弹速度
         bltObj.position = this.player.node.getPosition(); // 设置子弹初始位置
@@ -107,6 +107,7 @@ export class ArrowBow extends PlayerWeapon implements IPlayerWeapon {
         bltObj.mass = 5;
         bltObj.skinObject = blt;
         bltObj.gravity = 0.98+(1-force);
+        bltObj.bulletAttack = damage;
         //
         this._bulletLayerListArr.push(blt);
     }

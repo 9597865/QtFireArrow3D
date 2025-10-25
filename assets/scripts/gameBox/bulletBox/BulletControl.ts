@@ -49,6 +49,10 @@ export class BulletControl extends Component {
         
     }
 
+    /**
+     * 处理子弹击中敌人头部的函数
+     * @param data 包含子弹信息的对象，包含子弹角度、子弹对象和敌人头部信息
+     */
     onBulletHitEnemyHead(data:IBulletDataObject){
         console.log("bulletControl onBulletHitEnemyHead");
         const {bulletAngle, bulletObject:bltObj, enemyHead} = data;
@@ -64,19 +68,21 @@ export class BulletControl extends Component {
         this.bulletParticleBox.addChild(particleNode);  // 将粒子特效添加到子弹粒子盒子中
         //
         const ps:ParticleSystem = particleNode.getComponent(ParticleSystem) as ParticleSystem;
-        ps.play();
+        ps.play();  // 播放粒子特效
         // console.log(ps);  // 输出粒子系统信息（已注释）
         // console.log("bulletControl onBulletHitEnemyHead");  // 输出日志信息
         //
-        bltObj.bulletAttack = 12;
-        enemyHead.beaten(bltObj.bulletAttack);
+        // bltObj.bulletAttack = 12;  // 设置子弹攻击力为12
+        // console.log("打到头部", bltObj.bulletAttack*2);
+        // console.log("打到头部life", enemyHead.life);
+        enemyHead.beaten(bltObj.bulletAttack*2);  // 敌人头部受到攻击
         // 延迟执行销毁操作
         setTimeout(() => {
             particleNode.destroy();  // 销毁粒子特效节点
             // 静态子弹部分（已注释）
             // enemyHead.node.parent.parent.destroy();
-            if(enemyHead.life<=0) enemyHead.del();
-        }, 1000);
+            if(enemyHead.life<=0) enemyHead.del();  // 如果敌人生命值小于等于0，则删除敌人
+        }, 1000);  // 延迟1秒执行
     }
 
     /**
@@ -99,11 +105,11 @@ export class BulletControl extends Component {
         //
         const ps:ParticleSystem = particleNode.getComponent(ParticleSystem) as ParticleSystem;
         ps.play();
-        // console.log(ps);  // 输出粒子系统信息（已注释）
-        console.log("bulletControl onBulletHitEnemyBody");  // 输出日志信息
         // 延迟执行销毁操作
-        
-        enemyBody.beaten();
+        // console.log("打到人身", bltObj.bulletAttack); 
+        // console.log("打到人身life", enemyBody.life);
+
+        enemyBody.beaten(bltObj.bulletAttack);
 
         setTimeout(() => {
             particleNode.destroy();  // 销毁粒子特效节点
@@ -159,20 +165,11 @@ export class BulletControl extends Component {
         const ps:ParticleSystem = particleNode.getComponent(ParticleSystem) as ParticleSystem;
         ps.play();
         // console.log(ps);
-        console.log("bulletControl onBulletHitEnemyFloor");
+        // console.log("bulletControl onBulletHitEnemyFloor");
         setTimeout(() => {
             particleNode.destroy();
         }, 1000);
 
-        // //静态子弹
-        // const blt = instantiate(this.bulletStaticPrefab);
-        // blt.setPosition(x,y,z);
-        // blt.setRotationFromEuler(0,0,bltAngle);
-        // this.bulletCylinderStaticBox.addChild(blt);
-
-        // setTimeout(() => {
-        //     blt.destroy();
-        // }, 2000);
     }
     
 }

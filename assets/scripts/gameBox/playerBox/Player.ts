@@ -32,6 +32,7 @@ export class Player extends Component implements IBaseAttributes{
     @property
     // 基础速度
     private _speed: number = 1;
+    private _level: number = 1;
     //
     gunObj: Node = null;
     // 持握武器的节点（如手部骨骼）
@@ -193,6 +194,12 @@ export class Player extends Component implements IBaseAttributes{
     }
     public set speed(value: number) {
         this._speed = value;
+    }
+    public get level(): number {
+        return this._level;
+    }
+    public set level(value: number) {
+        this._level = value;
     }
 }
 
