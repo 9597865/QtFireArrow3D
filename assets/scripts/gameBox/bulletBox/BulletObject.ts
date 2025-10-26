@@ -213,7 +213,13 @@ export class BulletObject extends Vehicle implements IBullet {
         // this._skinObject.setRotationFromEuler(new Vec3(angle,0,0));
     }
     
+    /**
+     * 获取子弹的当前角度
+     * @returns {number} 返回子弹的角度值（度数）
+     */
     public getBulletAngle(){
+        // 使用Math.atan2计算子弹运动方向的角度（弧度）
+        // 将弧度转换为度数，并加上90度以调整坐标系
         const angle = Math.atan2(this.velocity.y, this.velocity.x) * 180 / Math.PI + 90 ;
         return angle;
     }

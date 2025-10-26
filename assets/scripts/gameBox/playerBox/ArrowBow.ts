@@ -86,7 +86,7 @@ export class ArrowBow extends PlayerWeapon implements IPlayerWeapon {
         return canAttack;
     }
     // 生成弓箭特效
-    protected spawnEffect(data:Object):void {
+    protected spawnEffect(data:any):void {
         const {force,weaponData} = data;
         let {damage,criticalChance}= weaponData.baseAttributes;
         let fireForce:number = 0.45*force;

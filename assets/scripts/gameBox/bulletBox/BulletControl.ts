@@ -1,4 +1,4 @@
-import { _decorator, Component, instantiate, Node, ParticleSystem, Prefab, Vec3 } from 'cc';
+import { _decorator, Camera, Component, find, instantiate, Label, Node, ParticleSystem, Prefab, UITransform, Vec2, Vec3 } from 'cc';
 import { Player } from '../playerBox/Player';
 import { BulletObject } from './BulletObject';
 import { QtMath } from '../../qt_cocos_ts/utils/QtMath';
@@ -19,29 +19,43 @@ export class BulletControl extends Component {
     @property([Prefab])
     bulletParticleArr: Prefab[] = [];
 
+    @property(Prefab)
+    numLabel2dPrefab: Node = null;
+
+    mainCamera: Camera = null;
+    uiCamera: Camera = null;
+
     bulletLayerBox: Node = null;
     bulletParticleBox: Node = null;
     bulletCylinderStaticBox: Node = null;
 
     bulletLayerListArr: Node[] = [];
 
+    label2dBox: Node = null;
+    uiTransform:UITransform = null;
     /**
      * 开始方法，用于初始化子弹层容器
      * 在游戏开始时调用，设置子弹层的引用
      */
     start() {
+
+        this.uiCamera = find("GameMainBox/Canvas/Camera").getComponent(Camera) as Camera; 
+        this.mainCamera = find("Main Camera").getComponent(Camera) as Camera; 
         // 获取名为"bulletLayerBox"的子节点，用于存放子弹对象
         this.bulletLayerBox = this.node.getChildByName("bulletLayerBox");
         this.bulletParticleBox = this.node.getChildByName("bulletParticleBox");
         this.bulletCylinderStaticBox = this.node.getChildByName("bulletCylinderStaticBox");
         
+        this.label2dBox = find("GameMainBox/Canvas/label2dBox");
+        this.uiTransform = this.label2dBox.getComponent(UITransform);
+        // console.log('this.label2dBox', this.label2dBox);
+        // console.log(this.label2dBox);
 
         AppNotification.on(GameEvent.EVENT_BULLET_HIT_ENEMYOBJECT_HEAD, this.onBulletHitEnemyHead, this);
         AppNotification.on(GameEvent.EVENT_BULLET_HIT_ENEMYOBJECT_BODY, this.onBulletHitEnemyBody, this);
         AppNotification.on(GameEvent.EVENT_BULLET_HIT_FLOOR, this.onBulletHitFloor, this);
         AppNotification.on(GameEvent.EVENT_BULLET_HIT_ENEMY_FLOOR, this.onBulletHitEnemyStanderFloor, this);
 
-        
     }
 
     // update(deltaTime: number) {
@@ -71,10 +85,25 @@ export class BulletControl extends Component {
         ps.play();  // 播放粒子特效
         // console.log(ps);  // 输出粒子系统信息（已注释）
         // console.log("bulletControl onBulletHitEnemyHead");  // 输出日志信息
+
         //
+        let enemyHeadWorldPos: Vec3 = enemyHead.node.getWorldPosition()
+        let screenPos: Vec3  = this.mainCamera.worldToScreen(enemyHeadWorldPos); 
+        //
+        let wPos:Vec3 = this.uiCamera.screenToWorld(screenPos);
+        let pos:Vec3 = this.uiTransform.convertToNodeSpaceAR(wPos);
+        
+       
+        // console.log(`屏幕坐标：x=${screenPos.x}, y=${screenPos.y}`);
+
+
+        const labelScore:Node = instantiate(this.numLabel2dPrefab);
+        labelScore.setPosition(pos.x, pos.y, 0);
+        labelScore.getComponent(Label).string = "100";
+        this.label2dBox.addChild(labelScore);
         // bltObj.bulletAttack = 12;  // 设置子弹攻击力为12
         // console.log("打到头部", bltObj.bulletAttack*2);
-        // console.log("打到头部life", enemyHead.life);
+        console.log("打到头部life", enemyHead.life);
         enemyHead.beaten(bltObj.bulletAttack*2);  // 敌人头部受到攻击
         // 延迟执行销毁操作
         setTimeout(() => {
@@ -107,7 +136,7 @@ export class BulletControl extends Component {
         ps.play();
         // 延迟执行销毁操作
         // console.log("打到人身", bltObj.bulletAttack); 
-        // console.log("打到人身life", enemyBody.life);
+        console.log("打到人身life", enemyBody.life);
 
         enemyBody.beaten(bltObj.bulletAttack);
 

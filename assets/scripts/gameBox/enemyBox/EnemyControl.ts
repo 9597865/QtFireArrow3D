@@ -32,7 +32,7 @@ export class enemyControl extends Component {
             // console.log(v3Pos);
         }
         
-
+        
 
     }
 
