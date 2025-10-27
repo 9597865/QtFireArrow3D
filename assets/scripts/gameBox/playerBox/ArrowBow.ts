@@ -4,7 +4,6 @@ import { BulletObject } from '../bulletBox/BulletObject';
 import { QtMath } from '../../qt_cocos_ts/utils/QtMath';
 import { Player } from './Player';
 import { IPlayerWeapon } from '../interface/IPlayerWeapon';
-import { IPlayerSwipe } from '../interface/IPlayerSwipe';
 const { ccclass, property } = _decorator;
 
 @ccclass('ArrowBow')

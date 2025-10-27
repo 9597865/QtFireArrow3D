@@ -8,7 +8,6 @@ import { IPlayerWeapon } from '../interface/IPlayerWeapon';
 import { PlayerWeapon } from './PlayerWeapon';
 import { ArrowBow } from './ArrowBow';
 import { ArrowBow2 } from './ArrowBow2';
-import { IPlayerSwipe } from '../interface/IPlayerSwipe';
 const { ccclass, property } = _decorator;
 
 @ccclass('Player')
@@ -123,7 +122,7 @@ export class Player extends Component implements IBaseAttributes{
         // this._currentWeapon = weaponNode.getComponent(Weapon);
         // this._currentWeapon?.init(this.weaponHolder); // 挂载到持握节点
     } 
-    public fire(receiveData:IPlayerSwipe){
+    public fire(receiveData:any){
         console.log("player fire");
         // console.log(receiveData.force);
         //挂靠武器类型

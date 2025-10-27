@@ -3,6 +3,7 @@ import { BulletObject } from './BulletObject';
 import { AppNotification } from '../../qt_cocos_ts/event/AppNotification';
 import { GameEvent } from '../events/GameEvent';
 import { EnemyObject } from '../enemyBox/EnemyObject';
+import { QtUILabelAnimation } from '../animations/QtUILabelAnimation';
 const { ccclass, property } = _decorator;
 
 @ccclass('BulletCollider')
@@ -68,7 +69,8 @@ export class BulletCollider extends Component {
                     {
                         enemyHead:e.otherCollider.node.parent.parent.getComponent(EnemyObject),
                         bulletObject:nd, 
-                        bulletAngle:angle
+                        bulletAngle:angle,
+                        qtUILabelAni:new QtUILabelAnimation(),
                     }
                 );
                 break;

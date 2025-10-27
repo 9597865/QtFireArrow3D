@@ -6,6 +6,8 @@ import { AppNotification } from '../../qt_cocos_ts/event/AppNotification';
 import { GameEvent } from '../events/GameEvent';
 import { IBulletDataObject } from '../interface/IParam';
 import { EnemyObject } from '../enemyBox/EnemyObject';
+import { ILabelAnimation } from '../interface/ILabelAnimation';
+import { QtUILabelAnimation } from '../animations/QtUILabelAnimation';
 const { ccclass, property } = _decorator;
 
 @ccclass('BulletControl')
@@ -20,7 +22,7 @@ export class BulletControl extends Component {
     bulletParticleArr: Prefab[] = [];
 
     @property(Prefab)
-    numLabel2dPrefab: Node = null;
+    numLabel2dPrefab: Prefab = null;
 
     mainCamera: Camera = null;
     uiCamera: Camera = null;
@@ -69,7 +71,7 @@ export class BulletControl extends Component {
      */
     onBulletHitEnemyHead(data:IBulletDataObject){
         console.log("bulletControl onBulletHitEnemyHead");
-        const {bulletAngle, bulletObject:bltObj, enemyHead} = data;
+        const {bulletAngle, bulletObject:bltObj, enemyHead, qtUILabelAni} = data;
         // 获取子弹节点的位置坐标
         const {x,y,z} = bltObj.node.getPosition();
         //粒子特效部分
@@ -83,26 +85,32 @@ export class BulletControl extends Component {
         //
         const ps:ParticleSystem = particleNode.getComponent(ParticleSystem) as ParticleSystem;
         ps.play();  // 播放粒子特效
-        // console.log(ps);  // 输出粒子系统信息（已注释）
-        // console.log("bulletControl onBulletHitEnemyHead");  // 输出日志信息
 
-        //
-        let enemyHeadWorldPos: Vec3 = enemyHead.node.getWorldPosition()
+
+        /*
+        //创建label2d
+        let enemyHeadWorldPos: Vec3 = enemyHead.node.getWorldPosition();
         let screenPos: Vec3  = this.mainCamera.worldToScreen(enemyHeadWorldPos); 
         //
         let wPos:Vec3 = this.uiCamera.screenToWorld(screenPos);
         let pos:Vec3 = this.uiTransform.convertToNodeSpaceAR(wPos);
         
        
-        // console.log(`屏幕坐标：x=${screenPos.x}, y=${screenPos.y}`);
-
-
         const labelScore:Node = instantiate(this.numLabel2dPrefab);
         labelScore.setPosition(pos.x, pos.y, 0);
         labelScore.getComponent(Label).string = "100";
         this.label2dBox.addChild(labelScore);
-        // bltObj.bulletAttack = 12;  // 设置子弹攻击力为12
-        // console.log("打到头部", bltObj.bulletAttack*2);
+        */
+
+        
+        if(qtUILabelAni){
+            let labelTxt:ILabelAnimation = qtUILabelAni;//new QtUILabelAnimation();
+            labelTxt.labelFab = this.numLabel2dPrefab;
+            labelTxt.showDuration = 1;
+            labelTxt.labelString = "100";
+            labelTxt.showLabel(enemyHead,this.label2dBox);
+        }
+
         console.log("打到头部life", enemyHead.life);
         enemyHead.beaten(bltObj.bulletAttack*2);  // 敌人头部受到攻击
         // 延迟执行销毁操作
