@@ -2,12 +2,12 @@
   "ver": "1.1.50",
   "importer": "prefab",
   "imported": true,
-  "uuid": "5e9ad3b6-ffa3-4e58-a2dc-b44365349641",
+  "uuid": "b4e24cc7-48d8-4ba5-8058-ff8e698d3611",
   "files": [
     ".json"
   ],
   "subMetas": {},
   "userData": {
-    "syncNodeName": "numLabel"
+    "syncNodeName": "uiBlood"
   }
 }

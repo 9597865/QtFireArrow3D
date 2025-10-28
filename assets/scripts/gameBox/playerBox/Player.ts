@@ -3,11 +3,11 @@ import { AppNotification } from '../../qt_cocos_ts/event/AppNotification';
 import { GamePlayerEvent } from '../events/GamePlayerEvent';
 import { BulletControl } from '../bulletBox/BulletControl';
 import { EuipmentControl } from '../euipmentBox/EuipmentControl';
-import { IBaseAttributes } from '../interface/IBaseAttributes';
 import { IPlayerWeapon } from '../interface/IPlayerWeapon';
 import { PlayerWeapon } from './PlayerWeapon';
 import { ArrowBow } from './ArrowBow';
 import { ArrowBow2 } from './ArrowBow2';
+import { IBaseAttributes } from '../interface/IBaseAttributes';
 const { ccclass, property } = _decorator;
 
 @ccclass('Player')
@@ -164,8 +164,8 @@ export class Player extends Component implements IBaseAttributes{
     }
 
     public get hp(): number {
-    return this._hp;
-}
+        return this._hp;
+    }
     public get mp(): number {
         return this._mp;
     }

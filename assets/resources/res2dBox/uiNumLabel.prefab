@@ -1,7 +1,7 @@
 [
   {
     "__type__": "cc.Prefab",
-    "_name": "numLabel",
+    "_name": "uiNumLabel",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_native": "",
@@ -13,7 +13,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "numLabel",
+    "_name": "uiNumLabel",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_parent": null,
@@ -73,8 +73,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 33.36396559785232,
-      "height": 50.4
+      "width": 37.36396559785232,
+      "height": 54.4
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -126,7 +126,7 @@
     "_isUnderline": false,
     "_underlineHeight": 2,
     "_cacheMode": 0,
-    "_enableOutline": false,
+    "_enableOutline": true,
     "_outlineColor": {
       "__type__": "cc.Color",
       "r": 0,
@@ -135,7 +135,7 @@
       "a": 255
     },
     "_outlineWidth": 2,
-    "_enableShadow": false,
+    "_enableShadow": true,
     "_shadowColor": {
       "__type__": "cc.Color",
       "r": 0,
@@ -164,6 +164,7 @@
       "__id__": 0
     },
     "fileId": "93j70NzudHrZVEP90W+5uX",
-    "instance": null
+    "instance": null,
+    "targetOverrides": null
   }
 ]

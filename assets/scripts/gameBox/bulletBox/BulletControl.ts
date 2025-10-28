@@ -107,18 +107,18 @@ export class BulletControl extends Component {
             let labelTxt:ILabelAnimation = qtUILabelAni;//new QtUILabelAnimation();
             labelTxt.labelFab = this.numLabel2dPrefab;
             labelTxt.showDuration = 1;
-            labelTxt.labelString = "100";
+            labelTxt.labelString = "-100";
             labelTxt.showLabel(enemyHead,this.label2dBox);
         }
 
-        console.log("打到头部life", enemyHead.life);
+        console.log("打到头部life", enemyHead.hp);
         enemyHead.beaten(bltObj.bulletAttack*2);  // 敌人头部受到攻击
         // 延迟执行销毁操作
         setTimeout(() => {
             particleNode.destroy();  // 销毁粒子特效节点
             // 静态子弹部分（已注释）
             // enemyHead.node.parent.parent.destroy();
-            if(enemyHead.life<=0) enemyHead.del();  // 如果敌人生命值小于等于0，则删除敌人
+            if(enemyHead.hp<=0) enemyHead.del();  // 如果敌人生命值小于等于0，则删除敌人
         }, 1000);  // 延迟1秒执行
     }
 
@@ -128,7 +128,7 @@ export class BulletControl extends Component {
      */
     onBulletHitEnemyBody(data:IBulletDataObject){
         // 使用解构赋值获取子弹角度、子弹对象和敌人身体
-        const {bulletAngle, bulletObject:bltObj, enemyBody} = data;
+        const {bulletAngle, bulletObject:bltObj, enemyBody, qtUILabelAni} = data;
         // 获取子弹节点的位置坐标
         const {x,y,z} = bltObj.node.getPosition();
         //粒子特效部分
@@ -144,15 +144,20 @@ export class BulletControl extends Component {
         ps.play();
         // 延迟执行销毁操作
         // console.log("打到人身", bltObj.bulletAttack); 
-        console.log("打到人身life", enemyBody.life);
-
+        // console.log("打到人身life", enemyBody.hp);
+        if(qtUILabelAni){
+            let labelTxt:ILabelAnimation = qtUILabelAni;//new QtUILabelAnimation();
+            labelTxt.labelFab = this.numLabel2dPrefab;
+            labelTxt.showDuration = 1;
+            labelTxt.labelString = "-50";
+            labelTxt.showLabel(enemyBody,this.label2dBox);
+        }
         enemyBody.beaten(bltObj.bulletAttack);
 
         setTimeout(() => {
             particleNode.destroy();  // 销毁粒子特效节点
             // 静态子弹部分（已注释）
-            // enemyBody.node.parent.parent.destroy();
-            if(enemyBody.life<=0) enemyBody.del();
+            if(enemyBody.hp<=0) enemyBody.del();
         }, 1000);
 
     }

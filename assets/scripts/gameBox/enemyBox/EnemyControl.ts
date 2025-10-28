@@ -8,6 +8,8 @@ export class enemyControl extends Component {
 
     @property(Prefab)
     enemyObjectPrefab: Prefab = null;
+    @property(Prefab)
+    uiBloodPrefab: Prefab = null;
 
 
     private enemyLayerBox:Node = null;
@@ -22,7 +24,7 @@ export class enemyControl extends Component {
             let v3Pos:Vec3 = positionArrList[i];
             const enemyObj = instantiate(this.enemyObjectPrefab);
             const enemyObject:EnemyObject = enemyObj.getComponent(EnemyObject);
-            enemyObject.life = 5;//QtMath.randomInt(1,4);
+            enemyObject.hp = 5;//QtMath.randomInt(1,4);
             // console.log("create enemy life:", enemyObject.life);
             // const angle = Vec3.angle(v3Pos, new Vec3(0, 0, 0));
             enemyObj.setPosition(v3Pos);
@@ -30,6 +32,10 @@ export class enemyControl extends Component {
             this.enemyLayerBox.addChild(enemyObj);
             // console.log(enemyObj.getPosition());
             // console.log(v3Pos);
+
+            const enemyUiBlood:Node = instantiate(this.uiBloodPrefab); 
+            enemyObj.addChild(enemyUiBlood);
+
         }
         
         

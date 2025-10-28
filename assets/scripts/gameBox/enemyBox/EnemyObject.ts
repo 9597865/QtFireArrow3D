@@ -1,28 +1,22 @@
 import { _decorator, Component, Node, Vec3 } from 'cc';
+import { IBaseAttributes } from '../interface/IBaseAttributes';
 const { ccclass, property } = _decorator;
 
 @ccclass('EnemyObject')
-export class EnemyObject extends Component {
+export class EnemyObject extends Component implements IBaseAttributes{
+    _hp: number = 3;
+    _mp: number;
+    _attack: number;
+    _defense: number;
+    _speed: number;
+    _level: number;
 
-
-    private _life:number = 3;
-
-
-    
     start() {
-        // const angle = Vec3.angle(this.node.position, new Vec3(0, 0, 0));
-        // console.log("angle", angle);
-
         this._name = 'enemy';
-
-        console.log("EnemyObject life:", this._life);
-        
     }
 
     gameTick(deltaTime: number) {
-    //    if(this.node.position.y > 0){
-    //         this.node.setPosition(this.node.position.x, this.node.position.y - deltaTime, 0);
-    //    } 
+   
     }
 
     /**
@@ -33,17 +27,17 @@ export class EnemyObject extends Component {
         //
         this.scaleNode(_damage) ;
         //-------------------------------
-        this._life -= _damage;
+        this._hp -= _damage;
         //
-        if(this._life <= 0){
-           this._life = 0;
+        if(this._hp <= 0){
+           this._hp = 0;
         }
     }
     private scaleNode(_damage:number){
         let scaleNumBig:number = 1.2;
         let scaleNumSmall:number = 1.02;
         let scaleNum:number = 1;
-        if(_damage>1 || this._life==1){
+        if(_damage>1 || this._hp==1){
             this.node.setScale(scaleNumBig, scaleNumBig, scaleNumBig);
         }else{
             this.node.setScale(scaleNumSmall, scaleNumSmall, scaleNumSmall);
@@ -59,11 +53,42 @@ export class EnemyObject extends Component {
         }
     }
 
-    get life():number{
-        return this._life;
+    public get hp(): number {
+        return this._hp;
     }
-    set life(value:number){
-        this._life = value;
+    public get mp(): number {
+        return this._mp;
+    }
+    public get attack(): number {
+        return this._attack;
+    }
+    public get defense(): number {
+        return this._defense;
+    }
+    public get speed(): number {
+        return this._speed;
+    }
+
+    public set hp(value: number) {
+        this._hp = value;
+    }
+    public set mp(value: number) {
+        this._mp = value;
+    }
+    public set attack(value: number) {
+        this._attack = value;
+    }
+    public set defense(value: number) {
+        this._defense = value;
+    }
+    public set speed(value: number) {
+        this._speed = value;
+    }
+    public get level(): number {
+        return this._level;
+    }
+    public set level(value: number) {
+        this._level = value;
     }
 }
 

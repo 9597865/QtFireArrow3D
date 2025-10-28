@@ -83,7 +83,8 @@ export class BulletCollider extends Component {
                     {
                         enemyBody:e.otherCollider.node.parent.parent.getComponent(EnemyObject),
                         bulletObject:nd, 
-                        bulletAngle:angle
+                        bulletAngle:angle,
+                        qtUILabelAni:new QtUILabelAnimation(),
                     }
                 );
                 break;
