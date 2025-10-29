@@ -1,5 +1,6 @@
 import { _decorator, Component, Node, Vec3 } from 'cc';
 import { IBaseAttributes } from '../interface/IBaseAttributes';
+import { QtUIBar } from '../animations/QtUiBar';
 const { ccclass, property } = _decorator;
 
 @ccclass('EnemyObject')
@@ -11,6 +12,7 @@ export class EnemyObject extends Component implements IBaseAttributes{
     _speed: number;
     _level: number;
 
+    _uiBar:QtUIBar;
     start() {
         this._name = 'enemy';
     }
@@ -89,6 +91,13 @@ export class EnemyObject extends Component implements IBaseAttributes{
     }
     public set level(value: number) {
         this._level = value;
+    }
+
+    public get uiBar(): QtUIBar {
+        return this._uiBar;
+    }
+    public set uiBar(value: QtUIBar) {
+        this._uiBar = value;
     }
 }
 

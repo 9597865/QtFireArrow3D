@@ -85,8 +85,6 @@ export class BulletControl extends Component {
         //
         const ps:ParticleSystem = particleNode.getComponent(ParticleSystem) as ParticleSystem;
         ps.play();  // 播放粒子特效
-
-
         /*
         //创建label2d
         let enemyHeadWorldPos: Vec3 = enemyHead.node.getWorldPosition();
@@ -94,24 +92,21 @@ export class BulletControl extends Component {
         //
         let wPos:Vec3 = this.uiCamera.screenToWorld(screenPos);
         let pos:Vec3 = this.uiTransform.convertToNodeSpaceAR(wPos);
-        
-       
+        //
         const labelScore:Node = instantiate(this.numLabel2dPrefab);
         labelScore.setPosition(pos.x, pos.y, 0);
         labelScore.getComponent(Label).string = "100";
         this.label2dBox.addChild(labelScore);
         */
-
-        
         if(qtUILabelAni){
-            let labelTxt:ILabelAnimation = qtUILabelAni;//new QtUILabelAnimation();
+            let labelTxt:ILabelAnimation = qtUILabelAni; //new QtUILabelAnimation();
             labelTxt.labelFab = this.numLabel2dPrefab;
             labelTxt.showDuration = 1;
             labelTxt.labelString = "-100";
             labelTxt.showLabel(enemyHead,this.label2dBox);
         }
-
         console.log("打到头部life", enemyHead.hp);
+
         enemyHead.beaten(bltObj.bulletAttack*2);  // 敌人头部受到攻击
         // 延迟执行销毁操作
         setTimeout(() => {

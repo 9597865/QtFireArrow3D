@@ -312,7 +312,7 @@
       "y": 0
     },
     "_fillStart": 0,
-    "_fillRange": 0.4,
+    "_fillRange": 1,
     "_isTrimmedMode": true,
     "_useGrayscale": false,
     "_atlas": null,
@@ -372,6 +372,7 @@
       "__id__": 0
     },
     "fileId": "97T3MGTARP/a8kuct1++3n",
+    "instance": null,
     "targetOverrides": null
   }
 ]
