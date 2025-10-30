@@ -1,4 +1,4 @@
-import { _decorator, Component, EventTouch, find, input, Input, Node, Vec3 } from 'cc';
+import { _decorator, Camera, Component, EventTouch, find, input, Input, Node, Vec3 } from 'cc';
 import { Player } from './playerBox/Player';
 import { EnemyObject } from './enemyBox/EnemyObject';
 import { QtMath } from '../qt_cocos_ts/utils/QtMath';
@@ -6,6 +6,7 @@ import { BulletControl } from './bulletBox/BulletControl';
 import { BulletPointPathLineCtrol } from './bulletBox/BulletPointPathLineCtrol';
 import { AppNotification } from '../qt_cocos_ts/event/AppNotification';
 import { GameEvent } from './events/GameEvent';
+import { EnemyControl } from './enemyBox/EnemyControl';
 const { ccclass, property } = _decorator;
 
 @ccclass('GameMainControl')
@@ -13,38 +14,29 @@ export class GameMainControl extends Component {
 
     @property(Player)
     player: Player = null;
-    @property(EnemyObject)
-    enemy: EnemyObject = null;
 
-    @property
-    // 旋转速度因子，值越大旋转越快
-    rotateSpeed: number = 5;
-    @property
-    // 允许的最小角度误差，小于此值则视为已对准
-    minAngleError: number = 0.5;
+    @property(EnemyControl)
+    enemyCtrl: EnemyControl = null;
 
     @property(BulletControl)
     bulletCtrl: BulletControl = null;
     
+    private mainCamera:Camera = null;
     private enemyBox:Node = null;
     private pointPathLineBox:Node = null;
 
     start() {
-        
+        this.mainCamera = find("Main Camera").getComponent(Camera) as Camera;  
         this.pointPathLineBox = find("GameMainBox/gameBox/bulletBox").getChildByName("bulletPointPathLineBox"); // this.node.getChildByName("bulletPointPathLineBox");
         // let pointPathObject = this.pointPathLineBox.getComponent("BulletPointPathLineCtrol");
-
         this.enemyBox = find("GameMainBox/gameBox/enemyBox"); // this.node.getChildByName("enemyBox");
-        
-        // console.log("enemyBox",this.enemyBox);
     }
 
     update(deltaTime: number) {
         this.player.gameTick(deltaTime);
         this.bulletCtrl.gameTick(deltaTime);
-
-
-        
+        this.enemyCtrl.gameTick(deltaTime);
+        // this.pointPathLineBox.getComponent(BulletPointPathLineCtrol).gameTick(deltaTime);
         /*
         // 计算炮口到目标的方向向量
         const playerGunPos:Vec3 = this.player.getGunPosition();
@@ -90,6 +82,8 @@ export class GameMainControl extends Component {
         // console.log("onTouchEnd");
 
         // this.bulletCtrl.fire(this.player);
+        
+        this.cameraSet3d();
     }
     
     onDisable () {
@@ -99,17 +93,31 @@ export class GameMainControl extends Component {
     }
 
     
-
+    cameraSet3d(){
+        this.mainCamera.projection = Camera.ProjectionType.PERSPECTIVE;
+        this.mainCamera.fov = 60;
+        this.mainCamera.node.setPosition(-14,0,10);
+        this.mainCamera.node.setRotationFromEuler(0,-50,0);
+    }
+    cameraSet2d(){
+        this.mainCamera.projection = Camera.ProjectionType.ORTHO;
+        this.mainCamera.fov = 5;
+        this.mainCamera.node.setPosition(0,0,10);
+        this.mainCamera.node.setRotationFromEuler(0,0,0);
+    }
     onBtn(){
         // console.log("btn click");
         //this.player.settingPlayer();
-        this.enemy.node.setPosition(this.enemy.node.getPosition().x, QtMath.randomInt(5,9), 0);
+        // this.enemy.node.setPosition(this.enemy.node.getPosition().x, QtMath.randomInt(5,9), 0);
+        // this.mainCamera.projection === Camera.ProjectionType.PERSPECTIVE ? Camera.ProjectionType.ORTHOGRAPHIC : Camera.ProjectionType.PERSPECTIVE;
+        this.cameraSet3d();
     }
     onBtn2(){
         // console.log("btn click2");
         //开火
         // this.player.fire();
         // this.bulletCtrl.fire(this.player);
+        this.cameraSet2d();
     }
 }
 

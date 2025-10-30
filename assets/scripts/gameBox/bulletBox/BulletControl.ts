@@ -105,9 +105,11 @@ export class BulletControl extends Component {
             labelTxt.labelString = "-100";
             labelTxt.showLabel(enemyHead,this.label2dBox);
         }
+
         console.log("打到头部life", enemyHead.hp);
 
         enemyHead.beaten(bltObj.bulletAttack*2);  // 敌人头部受到攻击
+
         // 延迟执行销毁操作
         setTimeout(() => {
             particleNode.destroy();  // 销毁粒子特效节点
@@ -147,8 +149,9 @@ export class BulletControl extends Component {
             labelTxt.labelString = "-50";
             labelTxt.showLabel(enemyBody,this.label2dBox);
         }
-        enemyBody.beaten(bltObj.bulletAttack);
 
+        enemyBody.beaten(bltObj.bulletAttack);
+        
         setTimeout(() => {
             particleNode.destroy();  // 销毁粒子特效节点
             // 静态子弹部分（已注释）

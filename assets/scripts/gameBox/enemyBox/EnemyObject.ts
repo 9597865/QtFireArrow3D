@@ -5,20 +5,24 @@ const { ccclass, property } = _decorator;
 
 @ccclass('EnemyObject')
 export class EnemyObject extends Component implements IBaseAttributes{
-    _hp: number = 3;
-    _mp: number;
-    _attack: number;
-    _defense: number;
-    _speed: number;
-    _level: number;
+    private _hpTotal: number = 3;
+    private _hp: number = 3;
+    private _mp: number;
+    private _attack: number;
+    private _defense: number;
+    private _speed: number;
+    private _level: number;
+    private _uiBar:QtUIBar;
 
-    _uiBar:QtUIBar;
+
     start() {
         this._name = 'enemy';
     }
 
     gameTick(deltaTime: number) {
-   
+        if(this.uiBar){
+            this.uiBar.gameTick(deltaTime);
+        }
     }
 
     /**
@@ -31,10 +35,19 @@ export class EnemyObject extends Component implements IBaseAttributes{
         //-------------------------------
         this._hp -= _damage;
         //
-        if(this._hp <= 0){
-           this._hp = 0;
+        if(this._hp <= 0) this._hp = 0;
+        if(this.uiBar) this.setBarPercent();
+
+    }
+
+    public setBarPercent(){
+        if(this.uiBar){
+            const per:number = Math.round(this._hp/this._hpTotal*100)/100;
+            this.uiBar.setBarValue(per);
+            console.log("beaten per:", per);
         }
     }
+
     private scaleNode(_damage:number){
         let scaleNumBig:number = 1.2;
         let scaleNumSmall:number = 1.02;
@@ -51,6 +64,7 @@ export class EnemyObject extends Component implements IBaseAttributes{
     public del(){
         if(this.node) {
             this.node.destroy();
+            if(this.uiBar) this.uiBar.del();
             console.log("del this.node", this.node);
         }
     }
@@ -71,6 +85,12 @@ export class EnemyObject extends Component implements IBaseAttributes{
         return this._speed;
     }
 
+    public get hpTotal(): number {
+        return this._hpTotal;
+    }
+    public set hpTotal(value: number) {
+        this._hpTotal = value;
+    }
     public set hp(value: number) {
         this._hp = value;
     }
