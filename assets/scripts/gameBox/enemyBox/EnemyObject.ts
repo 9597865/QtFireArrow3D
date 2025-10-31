@@ -1,4 +1,4 @@
-import { _decorator, Component, Node, Vec3 } from 'cc';
+import { _decorator, Component, instantiate, Node, ParticleSystem, Prefab, resources, tween, UIOpacity, Vec3 } from 'cc';
 import { IBaseAttributes } from '../interface/IBaseAttributes';
 import { QtUIBar } from '../animations/QtUiBar';
 const { ccclass, property } = _decorator;
@@ -17,6 +17,35 @@ export class EnemyObject extends Component implements IBaseAttributes{
 
     start() {
         this._name = 'enemy';
+
+
+        const enemyPeople:Node = this.node.getChildByName('enemyPeople');
+        // console.log('enemyPeople:', enemyPeople);
+        enemyPeople.active = false;
+        //
+        resources.load("effect/levelUp/up", Prefab, (err, prefab) => {
+            if (err) {
+                console.error('Failed to load prefab:', err);
+                return;
+            }
+            // this._bulletPrefab = prefab;
+            const levelUpEffectNode:Node = instantiate(prefab);
+            this.node.addChild(levelUpEffectNode);
+            const lightUp01:Node = levelUpEffectNode.getChildByName('lightUp01');
+            lightUp01.setScale(2.5, 2.5, 2.5);
+            // console.log('lightUp01:', lightUp01);
+            const ps:ParticleSystem = lightUp01.getComponent(ParticleSystem) as ParticleSystem;
+            ps.play();
+            ps.loop = true;
+            //
+            setTimeout(() => {
+                levelUpEffectNode.destroy();
+                ps.stop();
+                enemyPeople.active = true;
+            },1000);
+
+            // console.log('levelUp loaded:', prefab);
+        });
     }
 
     gameTick(deltaTime: number) {

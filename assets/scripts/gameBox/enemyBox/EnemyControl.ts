@@ -32,8 +32,6 @@ export class EnemyControl extends Component {
             enemyObj.setPosition(v3Pos);
             // enemyObj.setScale(new Vec3(1+i/5,1+i/5,1+i/5));
             // enemyObj.setRotationFromEuler(0,0,bltAngle);
-            
-            //
             const bloodBox = enemyObject.node.getChildByName("bloodBox");
             // const enemyUiBlood:Node = instantiate(this.uiBloodPrefab); 
             // this.enemyUiBloodBox.addChild(enemyUiBlood);
