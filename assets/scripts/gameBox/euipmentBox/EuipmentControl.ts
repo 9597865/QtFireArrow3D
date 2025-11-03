@@ -15,7 +15,7 @@ export class EuipmentControl extends Component {
         
         let euiqObj = {
             id: 1001,
-            eqName: "木剑",
+            eqName: "wooden_sword",
             eqType: "weapon",
             rarity: "common",
             levelRequirement: 1,

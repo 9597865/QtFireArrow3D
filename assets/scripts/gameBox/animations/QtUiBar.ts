@@ -14,6 +14,7 @@ export class QtUIBar extends Component {
     private _fab:Prefab = null;
 
     private _uiBarObject:Node = null;
+    private _acitve: boolean = false;
 
     public get fab():Prefab{
         return this._fab;
@@ -59,7 +60,8 @@ export class QtUIBar extends Component {
     }
     updatePositon(mountNode:Node, parentBox:Node){
         if (!mountNode || !parentBox || !this._uiBarObject) {
-            throw new Error('Invalid node parameters');
+            return;
+            // throw new Error('Invalid node parameters');
         }
         let mountWorldPos: Vec3 = mountNode.getWorldPosition(); 
         let screenPos: Vec3  = this.mainCamera.worldToScreen(mountWorldPos); 
@@ -75,9 +77,20 @@ export class QtUIBar extends Component {
         this.spriteBar.fillRange = this.barValue;
     }
 
+
+    public get active(): boolean {
+        return this._acitve;
+    }   
+    public set active(value: boolean) {
+        this._acitve = value;
+        if (this._uiBarObject) {
+            this._uiBarObject.active = this._acitve;
+        }
+    }
     del(){
         if (this._uiBarObject) {
             this._uiBarObject.destroy();
+            this._uiBarObject = null;
         }
     }
 }

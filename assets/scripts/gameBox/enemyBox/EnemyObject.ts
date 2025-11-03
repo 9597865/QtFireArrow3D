@@ -1,6 +1,7 @@
 import { _decorator, Component, instantiate, Node, ParticleSystem, Prefab, resources, tween, UIOpacity, Vec3 } from 'cc';
 import { IBaseAttributes } from '../interface/IBaseAttributes';
 import { QtUIBar } from '../animations/QtUiBar';
+import { EnemyParticle_LevelUp } from './enemyAnimation/EnemyParticleLevelUp';
 const { ccclass, property } = _decorator;
 
 @ccclass('EnemyObject')
@@ -22,6 +23,8 @@ export class EnemyObject extends Component implements IBaseAttributes{
         const enemyPeople:Node = this.node.getChildByName('enemyPeople');
         // console.log('enemyPeople:', enemyPeople);
         enemyPeople.active = false;
+        // this.node.active = false;
+        this.uiBar.active = false;
         //
         resources.load("effect/levelUp/up", Prefab, (err, prefab) => {
             if (err) {
@@ -29,23 +32,40 @@ export class EnemyObject extends Component implements IBaseAttributes{
                 return;
             }
             // this._bulletPrefab = prefab;
+            // this.uiBar.del(); 
+            // console.log("this.uiBar:",this.uiBar);
+
+            /*
             const levelUpEffectNode:Node = instantiate(prefab);
             this.node.addChild(levelUpEffectNode);
             const lightUp01:Node = levelUpEffectNode.getChildByName('lightUp01');
             lightUp01.setScale(2.5, 2.5, 2.5);
-            // console.log('lightUp01:', lightUp01);
             const ps:ParticleSystem = lightUp01.getComponent(ParticleSystem) as ParticleSystem;
             ps.play();
             ps.loop = true;
-            //
+            // 自动销毁处理
             setTimeout(() => {
                 levelUpEffectNode.destroy();
                 ps.stop();
                 enemyPeople.active = true;
             },1000);
+            */
 
-            // console.log('levelUp loaded:', prefab);
+            //
+            const levelUpPtObj:EnemyParticle_LevelUp = new EnemyParticle_LevelUp(prefab, this.node);
+            levelUpPtObj.play('lightUp01',()=>{
+                this.node.active = true;
+                enemyPeople.active = true;
+                this.uiBar.active = true;
+            });
+
+
         });
+    }
+
+    fade(b:boolean){
+        this.node.active = b;
+        this.uiBar.active = b;
     }
 
     gameTick(deltaTime: number) {

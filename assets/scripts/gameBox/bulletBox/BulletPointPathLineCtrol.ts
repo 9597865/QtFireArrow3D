@@ -57,21 +57,30 @@ export class BulletPointPathLineCtrol extends Component {
         let p2Local:Vec3 = this.uiTransform.convertToNodeSpaceAR(p2);
         p2Local.z = 0;
 
+        
+        
 
+        //计算出力度的百分比
+        let percent:number = Math.round(this._force/18*100)/100;
+        //总数为10个点
+        let pointTotal:number = Math.min(percent,1)*10;
+        // 百分比的1.5倍，为最终显示点数
+        pointTotal = Math.min(Math.round(pointTotal*1.5),10);
+        // console.log("BulletPointPathLineCtrol pointTotal",pointTotal);
 
-        getPointsBetweenTwoPoints(p1,p2Local,10).forEach((v3:Vec3,index:number)=>{
+        getPointsBetweenTwoPoints(p1,p2Local,pointTotal).forEach((v3:Vec3,index:number)=>{
             const scale:number = 0.05+0.1/(index+1);
             const p = instantiate(this.point);
             p.setPosition(v3);
             p.setScale(new Vec3(scale,scale,0.1));
             this.node.addChild(p);
             this.pointPathLineListArr.push(p);
-        });
-
+        }); 
 
         let playerPos:Vec3 = p1.subtract(p2Local);
         const targetAngle = Math.atan2(playerPos.y, playerPos.x);
         let targetDegree = QtMath.radiansToDegrees(targetAngle) + 90;
+        //player角度
         this.player.setGunAngle(targetDegree);
 
         //鼠标，触摸，力度为距离
@@ -80,14 +89,15 @@ export class BulletPointPathLineCtrol extends Component {
 
         
     }
+    /**
+     * 处理鼠标在舞台上释放结束事件的回调函数
+     * @param data - 事件携带的数据，类型为any
+     */
     onStageMouseEnd(data:any){
-        // console.log("BulletPointPathLineCtrol onStageMouseEnd");
-        // this.node.removeAllChildren();
-
+        // 发射玩家开火事件通知，并传递计算后的力度值
+        // 力度值经过标准化处理：原始力度除以18并保留两位小数
         AppNotification.emit(GamePlayerEvent.EVENT_PLYAYER_FIRE,{force:Math.round(this._force/18*100)/100});
-
         // this._force = 0;
-        
     }
 
     update(deltaTime: number) {
