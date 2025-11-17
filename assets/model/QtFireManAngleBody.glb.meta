@@ -1,0 +1,159 @@
+{
+  "ver": "2.3.13",
+  "importer": "gltf",
+  "imported": true,
+  "uuid": "47eca6dc-1260-4c37-be08-a217cf246295",
+  "files": [
+    "__original-animation-0.cconb"
+  ],
+  "subMetas": {
+    "7913f": {
+      "importer": "gltf-mesh",
+      "uuid": "47eca6dc-1260-4c37-be08-a217cf246295@7913f",
+      "displayName": "",
+      "id": "7913f",
+      "name": "球体.001.mesh",
+      "userData": {
+        "gltfIndex": 0,
+        "triangleCount": 1838
+      },
+      "ver": "1.1.1",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "720f2": {
+      "importer": "gltf-animation",
+      "uuid": "47eca6dc-1260-4c37-be08-a217cf246295@720f2",
+      "displayName": "",
+      "id": "720f2",
+      "name": "angle_body.animation",
+      "userData": {
+        "gltfIndex": 0,
+        "wrapMode": 2,
+        "sample": 30,
+        "span": {
+          "from": 0,
+          "to": 0.0416666679084301
+        },
+        "events": [],
+        "embeddedPlayers": [],
+        "editorExtras": {
+          "embeddedPlayerGroups": []
+        },
+        "speed": 1,
+        "auxiliaryCurves": {}
+      },
+      "ver": "1.0.17",
+      "imported": true,
+      "files": [
+        ".cconb"
+      ],
+      "subMetas": {}
+    },
+    "11e22": {
+      "importer": "gltf-skeleton",
+      "uuid": "47eca6dc-1260-4c37-be08-a217cf246295@11e22",
+      "displayName": "",
+      "id": "11e22",
+      "name": "rig.skeleton",
+      "userData": {
+        "gltfIndex": 0,
+        "jointsLength": 222
+      },
+      "ver": "1.0.1",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "22e2a": {
+      "importer": "gltf-material",
+      "uuid": "47eca6dc-1260-4c37-be08-a217cf246295@22e2a",
+      "displayName": "",
+      "id": "22e2a",
+      "name": "材质.material",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.14",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "709e5": {
+      "importer": "gltf-scene",
+      "uuid": "47eca6dc-1260-4c37-be08-a217cf246295@709e5",
+      "displayName": "",
+      "id": "709e5",
+      "name": "QtFireManAngleBody.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.14",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "imageMetas": [],
+    "animationImportSettings": [
+      {
+        "name": "angle_body",
+        "duration": 0.0416666679084301,
+        "fps": 30,
+        "splits": [
+          {
+            "name": "angle_body",
+            "from": 0,
+            "to": 0.0416666679084301,
+            "wrapMode": 2,
+            "previousId": "720f2"
+          }
+        ]
+      }
+    ],
+    "lods": {
+      "enable": false,
+      "hasBuiltinLOD": false,
+      "options": [
+        {
+          "screenRatio": 0.25,
+          "faceCount": 1
+        },
+        {
+          "screenRatio": 0.125,
+          "faceCount": 0.25
+        },
+        {
+          "screenRatio": 0.01,
+          "faceCount": 0.1
+        }
+      ]
+    },
+    "assetFinder": {
+      "meshes": [
+        "47eca6dc-1260-4c37-be08-a217cf246295@7913f"
+      ],
+      "skeletons": [
+        "47eca6dc-1260-4c37-be08-a217cf246295@11e22"
+      ],
+      "textures": [],
+      "materials": [
+        "47eca6dc-1260-4c37-be08-a217cf246295@22e2a"
+      ],
+      "scenes": [
+        "47eca6dc-1260-4c37-be08-a217cf246295@709e5"
+      ]
+    }
+  }
+}

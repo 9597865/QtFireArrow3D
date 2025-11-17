@@ -12,9 +12,13 @@ export class BulletPointPathLineCtrol extends Component {
     @property(Prefab)
     point:Prefab = null;
 
-    private uiTransform:UITransform = null;
-    private cameraObj:Camera = null;
-    private player:Player = null;
+    private _uiTransform:UITransform = null;
+    private _cameraObj:Camera = null;
+    private _player:Player = null;
+
+    private _firePointNode:Node = null;
+    private _arrowSocketNode:Node = null;
+    private _weaponNode:Node = null;
     // 
     private pointPathLineListArr:Node[] = [];
     //鼠标滑动的力度
@@ -25,16 +29,21 @@ export class BulletPointPathLineCtrol extends Component {
         AppNotification.on(GameEvent.EVENT_STAGE_MOUSE_END, this.onStageMouseEnd, this);
 
         
-        this.uiTransform = this.getComponent(UITransform);
-        if(this.uiTransform){
+        this._uiTransform = this.getComponent(UITransform);
+        if(this._uiTransform){
             // console.log("BulletPointPathLineCtrol UITransform");
             // console.log(this.uiTransform);
         }
 
-        this.cameraObj = find("Main Camera").getComponent(Camera) as Camera;
-        this.player = find("GameMainBox/gameBox/playerBox/playerObject").getComponent(Player) as Player;
+        this._cameraObj = find("Main Camera").getComponent(Camera) as Camera;
+        this._player = find("GameMainBox/gameBox/playerBox/playerObject").getComponent(Player) as Player;
         
-
+        let socketPath:string = "GameMainBox/gameBox/playerBox/playerObject/gunBox/QtFireManAngleBody/VIS_upper_arm_ik_pole.R Socket/";
+        this._firePointNode = find(socketPath+"firePointBox");
+        this._weaponNode = find(socketPath+"weaponBox");
+        this._arrowSocketNode = find("GameMainBox/gameBox/playerBox/playerObject/gunBox/QtFireManAngleBody/rig/MCH-hand_ik.parent.R/hand_ik.R/MCH-upper_arm_ik_target.R");
+        console.log("_arrowSocketNode", this._arrowSocketNode);
+        console.log(this._arrowSocketNode.getPosition());
     }
 
     onStageMouseStart(data:any){
@@ -46,19 +55,20 @@ export class BulletPointPathLineCtrol extends Component {
         //console.log(data.event.getLocation());
         //console.log(data.event.getUILocation());
         //console.log(this.player.node.getPosition());
-        if(!this.player){
+        if(!this._player){
             return;
         }
-        this.node.removeAllChildren();
+        // this._firePointNode.setPosition(this._arrowSocketNode.getPosition());
+        this._firePointNode.removeAllChildren();
         //
-        let p1:Vec3 = this.player.node.getPosition();
+        let p1:Vec3 = this._weaponNode.getPosition();
+        // let p1:Vec3 = this._player.node.getPosition();
+        // let p1:Vec3 = this._arrowSocketNode.getWorldPosition();
         p1.z = 0;
-        let p2:Vec3 = this.cameraObj.screenToWorld(data.event.getLocation().toVec3()); // new Vec3(2,2,2);
-        let p2Local:Vec3 = this.uiTransform.convertToNodeSpaceAR(p2);
+        let p2:Vec3 = this._cameraObj.screenToWorld(data.event.getLocation().toVec3()); // new Vec3(2,2,2);
+        let p2Local:Vec3 = this._uiTransform.convertToNodeSpaceAR(p2);
         p2Local.z = 0;
 
-        
-        
 
         //计算出力度的百分比
         let percent:number = Math.round(this._force/18*100)/100;
@@ -71,17 +81,17 @@ export class BulletPointPathLineCtrol extends Component {
         getPointsBetweenTwoPoints(p1,p2Local,pointTotal).forEach((v3:Vec3,index:number)=>{
             const scale:number = 0.05+0.1/(index+1);
             const p = instantiate(this.point);
-            p.setPosition(v3);
+            p.setPosition(v3.add(this._arrowSocketNode.getPosition()));
             p.setScale(new Vec3(scale,scale,0.1));
-            this.node.addChild(p);
+            this._firePointNode.addChild(p);
             this.pointPathLineListArr.push(p);
-        }); 
+        });
 
         let playerPos:Vec3 = p1.subtract(p2Local);
         const targetAngle = Math.atan2(playerPos.y, playerPos.x);
-        let targetDegree = QtMath.radiansToDegrees(targetAngle) + 90;
+        let targetDegree = QtMath.radiansToDegrees(targetAngle) + 90 + 20;
         //player角度
-        this.player.setGunAngle(targetDegree);
+        this._player.setGunAngle(targetDegree);
 
         //鼠标，触摸，力度为距离
         let playerPosLength:number = Math.min(playerPos.length(),18);
