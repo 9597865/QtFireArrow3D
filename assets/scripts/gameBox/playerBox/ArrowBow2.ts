@@ -18,6 +18,7 @@ export class ArrowBow2 extends PlayerWeapon implements IPlayerWeapon {
     private _player: Player;
     private _totalTime:number = 0;
 
+
     constructor() {
         //
         super();
@@ -94,11 +95,11 @@ export class ArrowBow2 extends PlayerWeapon implements IPlayerWeapon {
             //this.shoot(0.2-0.01*i,angle+90-i);
         }
     }
-    private shoot(i:number,data:Object) {
+    private shoot(i:number,data:any) {
         const {force} = data;
         let fireForce:number = 0.45*force-0.01*i;
         // let bulletSpeed:number = 0.2-0.01*i;
-        let angle:number = this.player.getGunAngle()+90;
+        let fireAngle:number = this.player.getGunAngle() + 60;
         const blt = instantiate(this._bulletPrefab);
         this._bulletLayerBox.addChild(blt);
         blt.setRotationFromEuler(0,0,this.player.getGunAngle()); // 设置子弹旋转角度
@@ -106,7 +107,7 @@ export class ArrowBow2 extends PlayerWeapon implements IPlayerWeapon {
         const bltObj:BulletObject = blt.getComponent('BulletObject') as BulletObject;
         // 计算子弹速度,角度向量
         // const velocity = QtMath.convertSpeedAngleToVector3(0.4,this.player.getGunAngle()+90); 
-        const velocity = QtMath.convertSpeedAngleToVector3(fireForce,angle); 
+        const velocity = QtMath.convertSpeedAngleToVector3(fireForce, fireAngle); 
         bltObj.name = 'bullet'; // 设置子弹名称
         bltObj.velocity = velocity; // 设置子弹速度
         bltObj.position = this.player.node.getPosition(); // 设置子弹初始位置

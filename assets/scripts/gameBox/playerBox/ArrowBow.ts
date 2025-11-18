@@ -19,22 +19,11 @@ export class ArrowBow extends PlayerWeapon implements IPlayerWeapon {
     private _totalTime:number = 0;
 
 
-    // private _mainCamera: Camera = null;
-    private _fireAngleTargetBox: Node = null;
-    private _firePointBox: Node = null;
-    // private _weaponNode: Node = null;
-    private _fireArrowBox: Node = null;
     constructor() {
         //
         super();
         this._bulletPointPathLineBox = find("GameMainBox/gameBox/bulletBox").getChildByName("bulletPointPathLineBox"); 
         this._bulletLayerBox = find("GameMainBox/gameBox/bulletBox").getChildByName("bulletLayerBox"); 
-        //
-        this._fireAngleTargetBox = find('GameMainBox/gameBox/playerBox/playerWeapon/fireAngleTargetBox');
-        this._fireArrowBox = find('GameMainBox/gameBox/playerBox/playerWeapon/fireArrowBox');
-        this._firePointBox = this._fireAngleTargetBox.getChildByName('firePointBox');
-        // console.log('ArrowBow constructor')
-        // console.log(this._fireArrowBox.getPosition());
         //
         // 动态加载预制体
         resources.load("bulletBox/bulletObject", Prefab, (err, prefab) => {
@@ -109,7 +98,6 @@ export class ArrowBow extends PlayerWeapon implements IPlayerWeapon {
         // 获取子弹组件并设置子弹属性
         const bltObj:BulletObject = blt.getComponent('BulletObject') as BulletObject;
         // const velocity = QtMath.convertSpeedAngleToVector3(0.2,this.player.getGunAngle()+90); // 计算子弹速度向量
-        //
         const velocity = QtMath.convertSpeedAngleToVector3(fireForce,fireAngle); // 计算子弹速度向量
         bltObj.name = 'bullet'; // 设置子弹名称
         bltObj.velocity = velocity; // 设置子弹速度

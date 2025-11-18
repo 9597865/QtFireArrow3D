@@ -18,6 +18,11 @@ export class PlayerWeapon extends Component{
     // 武器节点（挂载碰撞体、模型等）
     weaponNode: Node = null;
 
+
+    _fireAngleTargetBox: Node = null;
+    _firePointBox: Node = null;
+    _fireArrowBox: Node = null;
+
     async start() {
         // try {
         //     // 1. 加载 AssetBundle（包名：gameAssets）
@@ -44,7 +49,9 @@ export class PlayerWeapon extends Component{
         // assetManager.loadBundle('gameAssets', (err, bundle) => console.log(bundle));
         // assetManager.loadBundle('gameAssets/bulletObject', (err, bundle) => console.log(bundle));
         
-        
+        this._fireAngleTargetBox = find('GameMainBox/gameBox/playerBox/playerWeapon/fireAngleTargetBox');
+        this._fireArrowBox = find('GameMainBox/gameBox/playerBox/playerWeapon/fireArrowBox');
+        this._firePointBox = this._fireAngleTargetBox.getChildByName('firePointBox'); 
     }
 
     gameTick(deltaTime: number) {
