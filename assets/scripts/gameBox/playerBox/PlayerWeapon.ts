@@ -56,26 +56,13 @@ export class PlayerWeapon extends Component{
 
         
     }
-
     
-    
-    // attackTarget(target: Node): boolean {
-    //     if (this._coolDownTimer > 0) return false; // 冷却中无法攻击
-    //     this._coolDownTimer = this.attackSpeed;
-    //     this.playAttackAnim();
-    //     return true;
-    // }
     /**
      * 通用攻击接口（子类必须实现）
      * @param data 攻击目标的数据对象
      * @returns 返回是否成功攻击
      */
     attackTarget(data:Object) {
-        // TODO: fire
-        // console.log('PlyaerWeapon fire========'); // 输出攻击日志
-        // console.log(data); // 输出攻击数据
-        // console.log(this.player); // 注释掉的玩家日志
-
         // 检查冷却时间，如果冷却时间大于0则无法攻击
         if (this._coolDownTimer > 0) return false; // 冷却中无法攻击
         // 重置冷却时间并播放攻击动画

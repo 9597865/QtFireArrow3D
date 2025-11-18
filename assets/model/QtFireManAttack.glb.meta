@@ -2,20 +2,36 @@
   "ver": "2.3.13",
   "importer": "gltf",
   "imported": true,
-  "uuid": "b3a3e8df-d2b3-46b5-981a-b2487cd63168",
+  "uuid": "c5e8a2ae-6f95-42aa-b357-9a3c6c2f0baa",
   "files": [
     "__original-animation-0.cconb"
   ],
   "subMetas": {
+    "47879": {
+      "importer": "gltf-scene",
+      "uuid": "c5e8a2ae-6f95-42aa-b357-9a3c6c2f0baa@47879",
+      "displayName": "",
+      "id": "47879",
+      "name": "QtFireManAttack.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.14",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
     "7913f": {
       "importer": "gltf-mesh",
-      "uuid": "b3a3e8df-d2b3-46b5-981a-b2487cd63168@7913f",
+      "uuid": "c5e8a2ae-6f95-42aa-b357-9a3c6c2f0baa@7913f",
       "displayName": "",
       "id": "7913f",
       "name": "球体.001.mesh",
       "userData": {
         "gltfIndex": 0,
-        "triangleCount": 420
+        "triangleCount": 1418
       },
       "ver": "1.1.1",
       "imported": true,
@@ -25,27 +41,21 @@
       ],
       "subMetas": {}
     },
-    "aac5a": {
+    "989ed": {
       "importer": "gltf-animation",
-      "uuid": "b3a3e8df-d2b3-46b5-981a-b2487cd63168@aac5a",
+      "uuid": "c5e8a2ae-6f95-42aa-b357-9a3c6c2f0baa@989ed",
       "displayName": "",
-      "id": "aac5a",
-      "name": "angle_leg.animation",
+      "id": "989ed",
+      "name": "attack.animation",
       "userData": {
         "gltfIndex": 0,
         "wrapMode": 2,
         "sample": 30,
         "span": {
           "from": 0,
-          "to": 0.0416666679084301
+          "to": 1.0416666269302368
         },
-        "events": [],
-        "embeddedPlayers": [],
-        "editorExtras": {
-          "embeddedPlayerGroups": []
-        },
-        "speed": 1,
-        "auxiliaryCurves": {}
+        "events": []
       },
       "ver": "1.0.17",
       "imported": true,
@@ -56,7 +66,7 @@
     },
     "11e22": {
       "importer": "gltf-skeleton",
-      "uuid": "b3a3e8df-d2b3-46b5-981a-b2487cd63168@11e22",
+      "uuid": "c5e8a2ae-6f95-42aa-b357-9a3c6c2f0baa@11e22",
       "displayName": "",
       "id": "11e22",
       "name": "rig.skeleton",
@@ -73,26 +83,10 @@
     },
     "22e2a": {
       "importer": "gltf-material",
-      "uuid": "b3a3e8df-d2b3-46b5-981a-b2487cd63168@22e2a",
+      "uuid": "c5e8a2ae-6f95-42aa-b357-9a3c6c2f0baa@22e2a",
       "displayName": "",
       "id": "22e2a",
       "name": "材质.material",
-      "userData": {
-        "gltfIndex": 0
-      },
-      "ver": "1.0.14",
-      "imported": true,
-      "files": [
-        ".json"
-      ],
-      "subMetas": {}
-    },
-    "4ca55": {
-      "importer": "gltf-scene",
-      "uuid": "b3a3e8df-d2b3-46b5-981a-b2487cd63168@4ca55",
-      "displayName": "",
-      "id": "4ca55",
-      "name": "QtFireManAngleLeg.prefab",
       "userData": {
         "gltfIndex": 0
       },
@@ -108,16 +102,16 @@
     "imageMetas": [],
     "animationImportSettings": [
       {
-        "name": "angle_leg",
-        "duration": 0.0416666679084301,
+        "name": "attack",
+        "duration": 1.0416666269302368,
         "fps": 30,
         "splits": [
           {
-            "name": "angle_leg",
+            "name": "attack",
             "from": 0,
-            "to": 0.0416666679084301,
+            "to": 1.0416666269302368,
             "wrapMode": 2,
-            "previousId": "aac5a"
+            "previousId": "989ed"
           }
         ]
       }
@@ -142,17 +136,17 @@
     },
     "assetFinder": {
       "meshes": [
-        "b3a3e8df-d2b3-46b5-981a-b2487cd63168@7913f"
+        "c5e8a2ae-6f95-42aa-b357-9a3c6c2f0baa@7913f"
       ],
       "skeletons": [
-        "b3a3e8df-d2b3-46b5-981a-b2487cd63168@11e22"
+        "c5e8a2ae-6f95-42aa-b357-9a3c6c2f0baa@11e22"
       ],
       "textures": [],
       "materials": [
-        "b3a3e8df-d2b3-46b5-981a-b2487cd63168@22e2a"
+        "c5e8a2ae-6f95-42aa-b357-9a3c6c2f0baa@22e2a"
       ],
       "scenes": [
-        "b3a3e8df-d2b3-46b5-981a-b2487cd63168@4ca55"
+        "c5e8a2ae-6f95-42aa-b357-9a3c6c2f0baa@47879"
       ]
     }
   }
