@@ -155,6 +155,9 @@ export class BulletPointPathLineCtrol extends Component {
         // 力度值经过标准化处理：原始力度除以18并保留两位小数
         AppNotification.emit(GamePlayerEvent.EVENT_PLYAYER_FIRE,{force:Math.round(this._force/18*100)/100});
         // this._force = 0;
+        // 隐藏开火角度
+        this._fireAngleTargetBox.active = false;
+        setTimeout(()=>{this._fireAngleTargetBox.active = true;},500)
     }
 
     update(deltaTime: number) {
