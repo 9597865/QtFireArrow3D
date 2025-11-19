@@ -8,5 +8,6 @@ export class GamePlayerEvent {
 
     public static Player_Change_Bullet:string = "player_change_bullet" //飞机爆炸
     
+    public static Player_Change_Animation:string = "player_change_animation" //飞机爆炸
 }
 

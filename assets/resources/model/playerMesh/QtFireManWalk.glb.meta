@@ -1,0 +1,153 @@
+{
+  "ver": "2.3.13",
+  "importer": "gltf",
+  "imported": true,
+  "uuid": "cfdafdec-8330-495b-b12b-ee70ca77869e",
+  "files": [
+    "__original-animation-0.cconb"
+  ],
+  "subMetas": {
+    "7913f": {
+      "importer": "gltf-mesh",
+      "uuid": "cfdafdec-8330-495b-b12b-ee70ca77869e@7913f",
+      "displayName": "",
+      "id": "7913f",
+      "name": "球体.001.mesh",
+      "userData": {
+        "gltfIndex": 0,
+        "triangleCount": 1372
+      },
+      "ver": "1.1.1",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "7f3dc": {
+      "importer": "gltf-animation",
+      "uuid": "cfdafdec-8330-495b-b12b-ee70ca77869e@7f3dc",
+      "displayName": "",
+      "id": "7f3dc",
+      "name": "walk.animation",
+      "userData": {
+        "gltfIndex": 0,
+        "wrapMode": 2,
+        "sample": 30,
+        "span": {
+          "from": 0,
+          "to": 1.3333333333333333
+        },
+        "events": []
+      },
+      "ver": "1.0.17",
+      "imported": true,
+      "files": [
+        ".cconb"
+      ],
+      "subMetas": {}
+    },
+    "11e22": {
+      "importer": "gltf-skeleton",
+      "uuid": "cfdafdec-8330-495b-b12b-ee70ca77869e@11e22",
+      "displayName": "",
+      "id": "11e22",
+      "name": "rig.skeleton",
+      "userData": {
+        "gltfIndex": 0,
+        "jointsLength": 222
+      },
+      "ver": "1.0.1",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "22e2a": {
+      "importer": "gltf-material",
+      "uuid": "cfdafdec-8330-495b-b12b-ee70ca77869e@22e2a",
+      "displayName": "",
+      "id": "22e2a",
+      "name": "材质.material",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.14",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "1bc59": {
+      "importer": "gltf-scene",
+      "uuid": "cfdafdec-8330-495b-b12b-ee70ca77869e@1bc59",
+      "displayName": "",
+      "id": "1bc59",
+      "name": "QtFireManWalk.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.14",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "imageMetas": [],
+    "animationImportSettings": [
+      {
+        "name": "walk",
+        "duration": 2,
+        "fps": 30,
+        "splits": [
+          {
+            "name": "walk",
+            "from": 0,
+            "to": 1.3333333333333333,
+            "wrapMode": 2,
+            "previousId": "7f3dc"
+          }
+        ]
+      }
+    ],
+    "lods": {
+      "enable": false,
+      "hasBuiltinLOD": false,
+      "options": [
+        {
+          "screenRatio": 0.25,
+          "faceCount": 1
+        },
+        {
+          "screenRatio": 0.125,
+          "faceCount": 0.25
+        },
+        {
+          "screenRatio": 0.01,
+          "faceCount": 0.1
+        }
+      ]
+    },
+    "assetFinder": {
+      "meshes": [
+        "cfdafdec-8330-495b-b12b-ee70ca77869e@7913f"
+      ],
+      "skeletons": [
+        "cfdafdec-8330-495b-b12b-ee70ca77869e@11e22"
+      ],
+      "textures": [],
+      "materials": [
+        "cfdafdec-8330-495b-b12b-ee70ca77869e@22e2a"
+      ],
+      "scenes": [
+        "cfdafdec-8330-495b-b12b-ee70ca77869e@1bc59"
+      ]
+    }
+  }
+}

@@ -12,13 +12,14 @@ export class PlayerSkeletalAnimationControl extends Component {
     private _totalTime: number = 0;
 
     start() {
+        //
         this._skeletalAnimation = this.node.getComponent(SkeletalAnimation);
         // this._sockets = this._skeletalAnimation?.getSockets() || [];
         AppNotification.on(GamePlayerEvent.EVENT_PLYAYER_FIRE, this.fire, this);
     
         // this._skeletalAnimation.on(Animation.EventType.STOP, this.onAnimationFinished, this);
         // console.log(this._skeletalAnimation);
-        
+    //    this._skeletalAnimation?.play("idle");  
     }
 
     gameTick(deltaTime: number) {

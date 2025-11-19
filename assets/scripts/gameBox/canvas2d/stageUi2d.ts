@@ -2,6 +2,7 @@ import { _decorator, Camera, Component, EventKeyboard, EventTouch, find, input, 
 import { AppNotification } from '../../qt_cocos_ts/event/AppNotification';
 import { GameEvent } from '../events/GameEvent';
 import { GamePlayerEvent } from '../events/GamePlayerEvent';
+import { GameAnimationEvent } from '../events/GameAnimationEvent';
 const { ccclass, property } = _decorator;
 
 @ccclass('stageUi2d')
@@ -125,6 +126,10 @@ export class stageUi2d extends Component {
     onBtn3(){
         // console.log("btn click3");
         AppNotification.emit(GamePlayerEvent.Player_Change_Bullet, {weaponId:1,eqName:"wooden_sword"});  
+    }
+    onBtn4(){
+        // console.log("btn click4");
+        AppNotification.emit(GameAnimationEvent.ANIMATION_EVENT_START, {});  
     }
 }
 

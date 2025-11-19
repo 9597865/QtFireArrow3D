@@ -1,18 +1,17 @@
-import { _decorator, Camera, Component, find, instantiate, Node, Prefab, resources, UITransform, Vec3 } from 'cc';
-import { PlayerWeapon } from './PlayerWeapon';
-import { BulletObject } from '../bulletBox/BulletObject';
-import { QtMath } from '../../qt_cocos_ts/utils/QtMath';
-import { Player } from './Player';
-import { IPlayerWeapon } from '../interface/IPlayerWeapon';
+import { _decorator, Component, find, instantiate, Node, Prefab, resources, Vec3 } from 'cc';
+import { PlayerWeapon } from '../../playerBox/PlayerWeapon';
+import { IPlayerWeapon } from '../../interface/IPlayerWeapon';
+import { Player } from '../../playerBox/Player';
+import { BulletObject } from '../BulletObject';
+import { QtMath } from '../../../qt_cocos_ts/utils/QtMath';
 const { ccclass, property } = _decorator;
 
-@ccclass('ArrowBow')
-export class ArrowBow extends PlayerWeapon implements IPlayerWeapon {
+@ccclass('ArrowBow2')
+export class ArrowBow2 extends PlayerWeapon implements IPlayerWeapon {
     private _bulletPrefab: Prefab;
     private _bulletLayerBox: Node;
     private _bulletPointPathLineBox: Node;
     //
-    private _bulletParticleArr: Prefab[] = [];
     private _bulletLayerListArr: Node[] = [];
     //
     private _player: Player;
@@ -24,7 +23,7 @@ export class ArrowBow extends PlayerWeapon implements IPlayerWeapon {
         super();
         this._bulletPointPathLineBox = find("GameMainBox/gameBox/bulletBox").getChildByName("bulletPointPathLineBox"); 
         this._bulletLayerBox = find("GameMainBox/gameBox/bulletBox").getChildByName("bulletLayerBox"); 
-        //
+        
         // 动态加载预制体
         resources.load("bulletBox/bulletObject", Prefab, (err, prefab) => {
             if (err) {
@@ -78,7 +77,7 @@ export class ArrowBow extends PlayerWeapon implements IPlayerWeapon {
     }
     // 重写攻击逻辑（发射子弹）
     attackTarget(data:Object): boolean {
-        // console.log('ArrowBow attackTarget');
+        console.log('ArrowBow attackTarget');
         const canAttack = super.attackTarget(data);
         if (canAttack) {
             this.spawnEffect(data); // 发射弓箭
@@ -86,19 +85,28 @@ export class ArrowBow extends PlayerWeapon implements IPlayerWeapon {
         return canAttack;
     }
     // 生成弓箭特效
-    protected spawnEffect(data:any):void {
-        const {force,weaponData} = data;
-        let {damage,criticalChance}= weaponData.baseAttributes;
-        let fireForce:number = 0.45*force;
-        let fireAngle:number = this.player.getGunAngle()+60;
+    protected spawnEffect(data:Object):void {
+        
         // 实例化子弹并添加到子弹层
+        let angle:number = this.player.getGunAngle();
+        for (let i = 0; i < 3; i++) {
+            this.shoot(i,data);
+            //this.shoot(0.2-0.01*i,angle+90-i);
+        }
+    }
+    private shoot(i:number,data:any) {
+        const {force} = data;
+        let fireForce:number = 0.75*force-0.03*i;
+        // let bulletSpeed:number = 0.2-0.01*i;
+        let fireAngle:number = this.player.getGunAngle() + 60;
         const blt = instantiate(this._bulletPrefab);
         this._bulletLayerBox.addChild(blt);
         blt.setRotationFromEuler(0,0,this.player.getGunAngle()); // 设置子弹旋转角度
         // 获取子弹组件并设置子弹属性
         const bltObj:BulletObject = blt.getComponent('BulletObject') as BulletObject;
-        // const velocity = QtMath.convertSpeedAngleToVector3(0.2,this.player.getGunAngle()+90); // 计算子弹速度向量
-        const velocity = QtMath.convertSpeedAngleToVector3(fireForce,fireAngle); // 计算子弹速度向量
+        // 计算子弹速度,角度向量
+        // const velocity = QtMath.convertSpeedAngleToVector3(0.4,this.player.getGunAngle()+90); 
+        const velocity = QtMath.convertSpeedAngleToVector3(fireForce, fireAngle); 
         bltObj.name = 'bullet'; // 设置子弹名称
         bltObj.velocity = velocity; // 设置子弹速度
         // bltObj.position = this.player.node.getPosition(); // 设置子弹初始位置
@@ -107,8 +115,7 @@ export class ArrowBow extends PlayerWeapon implements IPlayerWeapon {
         bltObj.maxSpeed = 1;
         bltObj.mass = 5;
         bltObj.skinObject = blt;
-        bltObj.gravity = 0.98+(1-force);
-        bltObj.bulletAttack = damage;
+        bltObj.gravity = 0.98*1.3+(1-force);
         //
         this._bulletLayerListArr.push(blt);
     }

@@ -1,15 +1,10 @@
-import { _decorator, Component, EventKeyboard, Input, input, KeyCode, Node, Vec3 } from 'cc';
+import { _decorator, Component, find, Node, SkeletalAnimation, Vec3 } from 'cc';
 import { AppNotification } from '../../qt_cocos_ts/event/AppNotification';
 import { GamePlayerEvent } from '../events/GamePlayerEvent';
-import { BulletControl } from '../bulletBox/BulletControl';
 import { EuipmentControl } from '../euipmentBox/EuipmentControl';
-import { IPlayerWeapon } from '../interface/IPlayerWeapon';
-import { PlayerWeapon } from './PlayerWeapon';
-import { ArrowBow } from './ArrowBow';
-import { ArrowBow2 } from './ArrowBow2';
 import { IBaseAttributes } from '../interface/IBaseAttributes';
-import { GameEvent } from '../events/GameEvent';
 import { PlayerWeaponControl } from './PlayerWeaponControl';
+import { GameAnimationEvent } from '../events/GameAnimationEvent';
 const { ccclass, property } = _decorator;
 
 @ccclass('Player')
@@ -41,25 +36,53 @@ export class Player extends Component implements IBaseAttributes{
     // 武器列表（预制体，在编辑器中拖入）
     weaponPrefabs: Node[] = []; // 存放剑、弓等武器预制体
     //
-    
-    //
     private _playerWeaponCtrl: PlayerWeaponControl = null;
+
+    private _playerAnimationBox:Node = null;
+    private _playerWeaponBox:Node = null;
+    private _playerObjectBox:Node = null;
+
     start() {
         this.playerInit();
         this.setEvent();
     }
 
     playerInit(){
+
         this.playerWeaponCtrl = this.addComponent(PlayerWeaponControl);
         this.playerWeaponCtrl.player = this;
         //
         this.gunObj = this.node.getChildByName('gunBox');
         //
+        this._playerAnimationBox = find("GameMainBox/gameBox/playerBox/playerAnimationBox");
+        this._playerWeaponBox = find("GameMainBox/gameBox/playerBox/playerWeapon");
+        this._playerObjectBox = find("GameMainBox/gameBox/playerBox/playerObject");
+
+        this.hideAll();
+
+        this._playerAnimationBox.active = true;
+
+        setTimeout(() => {
+            this.hideAll();
+            this._playerWeaponBox.active = true;
+            this._playerObjectBox.active = true;
+            console.log("playerAnimationBox is hide");
+        }, 2000);
+
     }
     setEvent(){
+        //监听玩家开火
         AppNotification.on(GamePlayerEvent.EVENT_PLYAYER_FIRE, this.fire, this);
+
+        //监听动画开始
+        AppNotification.on(GameAnimationEvent.ANIMATION_EVENT_START, this.playAnimation, this);
     }
-    // 攻击输入处理
+
+    hideAll(b:boolean=false){
+        this._playerAnimationBox.active = b;
+        this._playerWeaponBox.active = b;
+        this._playerObjectBox.active = b;
+    }
     
     gameTick(deltaTime: number) {
         if(!this.playerWeaponCtrl) return;
@@ -95,13 +118,26 @@ export class Player extends Component implements IBaseAttributes{
         }
         //
         this.playerWeaponCtrl.currentWeapon.attackTarget(data);
+
+        
     }
 
-    public settingPlayer(){
-        // setTimeout(() => {
-            // this.node.setRotationFromEuler(0, 0, 50);
-        // },2000);
-        this.gunObj.setRotationFromEuler(0, 0, -50);
+    public playAnimation(){
+        this.hideAll();
+        let skAnimation = this._playerAnimationBox.getComponentInChildren(SkeletalAnimation);
+        skAnimation?.stop();
+        const randomFloat = Math.round(Math.random() * (3 - 1)) + 1;
+        console.log("randomFloat",randomFloat);
+        if(randomFloat == 1){
+            this._playerWeaponBox.active = true;
+            this._playerObjectBox.active = true;
+        }else if(randomFloat == 2 ){
+            this._playerAnimationBox.active = true;
+            skAnimation?.crossFade("run");
+        }else if(randomFloat == 3 ){
+            this._playerAnimationBox.active = true;
+            skAnimation?.crossFade("walk");
+        }
     }
 
     public getGunPosition():Vec3{

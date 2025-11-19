@@ -3,9 +3,9 @@ import { AppNotification } from '../../qt_cocos_ts/event/AppNotification';
 import { GameEvent } from '../events/GameEvent';
 import { IPlayerWeapon } from '../interface/IPlayerWeapon';
 import { Player } from './Player';
-import { ArrowBow } from './ArrowBow';
-import { ArrowBow2 } from './ArrowBow2';
 import { GamePlayerEvent } from '../events/GamePlayerEvent';
+import { ArrowBow } from '../bulletBox/bulletStyle/ArrowBow';
+import { ArrowBow2 } from '../bulletBox/bulletStyle/ArrowBow2';
 const { ccclass, property } = _decorator;
 
 @ccclass('PlayerWeaponControl')
@@ -27,7 +27,7 @@ export class PlayerWeaponControl extends Component {
     }
     // update(deltaTime: number) {}
     gameTick(deltaTime: number) {
-        // if(!this._currentWeapon) return;
+        if(!this._currentWeapon) return;
         this._currentWeapon.gameTick(deltaTime);
     }
     stageOnKeyDown(data: any) {

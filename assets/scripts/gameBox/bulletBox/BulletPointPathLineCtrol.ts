@@ -12,9 +12,12 @@ export class BulletPointPathLineCtrol extends Component {
     @property(Prefab)
     point:Prefab = null;
 
+    private _coolDownTimer = 0;
     private _uiTransform:UITransform = null;
     private _cameraObj:Camera = null;
     private _player:Player = null;
+
+    
 
     private _firePointNode:Node = null;
     private _fireArrowBox:Node = null;
@@ -34,6 +37,8 @@ export class BulletPointPathLineCtrol extends Component {
         // if(this._uiTransform){}
         this._cameraObj = find("Main Camera").getComponent(Camera) as Camera;
         this._player = find("GameMainBox/gameBox/playerBox/playerObject").getComponent(Player) as Player;
+
+        
         
         let socketPath:string = "GameMainBox/gameBox/playerBox/playerObject/gunBox/QtFireManAngleBody/VIS_upper_arm_ik_pole.R Socket/";
         this._weaponNode = find(socketPath+"weaponBox");
@@ -46,24 +51,8 @@ export class BulletPointPathLineCtrol extends Component {
        
         
     }
-    createPointLine(totalPoint:number = 10){
-        //
-        this._firePointNode.removeAllChildren();
-        this._firePointNode.setRotationFromEuler(0,0,60);
-        //
-        for(let i = 0; i < totalPoint; i++){
-            const step:number = 0.01+i*0.2;
-            const scale:number = 0.008+0.08/(i+1);
-            const p = instantiate(this.point);
-            const arrowPos:Vec3 = this._firePointNode.getPosition();
-            const v3 = arrowPos.add(new Vec3(1+step,0,0));
-            p.setPosition(v3);
-            p.setScale(new Vec3(scale,scale,scale));
-            this._firePointNode.addChild(p);
-        }
-
-    }
-    createPointPathLine(data:any){
+    
+    pointPathLine(data:any){
         this._firePointNode.removeAllChildren();
         //
         let p1:Vec3 = this._weaponNode.getPosition();
@@ -104,9 +93,28 @@ export class BulletPointPathLineCtrol extends Component {
         let playerPosLength:number = Math.min(playerPos.length(),18);
         this._force = Math.round(playerPosLength);
     }
+    createPointLine(totalPoint:number = 10){
+        //
+        this._firePointNode.removeAllChildren();
+        this._firePointNode.setRotationFromEuler(0,0,60);
+        //
+        for(let i = 0; i < totalPoint; i++){
+            const arrowPos:Vec3 = this._firePointNode.getPosition();
+            const step:number = 0.005+i*0.2;
+            const scale:number = 0.018+0.08/(i+1);
+            const p = instantiate(this.point);
+            const posY:number = -Math.pow(i*(20-totalPoint)/100*(20-totalPoint)/20,2);
+            const v3 = arrowPos.add(new Vec3(1+step,posY,0));
+            p.setPosition(v3);
+            p.setScale(new Vec3(scale,scale,scale));
+            this._firePointNode.addChild(p);
+        }
+
+    }
     onStageMouseStart(data:any){
         // console.log("BulletPointPathLineCtrol onStageMouseStart");
         // this._force = 0;
+        
     }
     onStageMouseMove(data:any){
         //console.log("BulletPointPathLineCtrol onStageMouseMove");
@@ -117,8 +125,6 @@ export class BulletPointPathLineCtrol extends Component {
             return;
         }
 
-        // this._player.node.setPosition(this._weaponNode.getPosition());
-        
         let p1:Vec3 = this._player.node.getPosition();
         p1.z = 0;
         let p2:Vec3 = this._cameraObj.screenToWorld(data.event.getLocation().toVec3()); // new Vec3(2,2,2);
@@ -151,17 +157,25 @@ export class BulletPointPathLineCtrol extends Component {
      * @param data - 事件携带的数据，类型为any
      */
     onStageMouseEnd(data:any){
+
+        if (this._coolDownTimer > 0) return false; // 冷却中无法攻击
+        // 重置冷却时间并播放攻击动画
+        this._coolDownTimer = 1;
+
         // 发射玩家开火事件通知，并传递计算后的力度值
         // 力度值经过标准化处理：原始力度除以18并保留两位小数
         AppNotification.emit(GamePlayerEvent.EVENT_PLYAYER_FIRE,{force:Math.round(this._force/18*100)/100});
         // this._force = 0;
         // 隐藏开火角度
         this._fireAngleTargetBox.active = false;
-        setTimeout(()=>{this._fireAngleTargetBox.active = true;},500)
+        setTimeout(()=>{this._fireAngleTargetBox.active = true;},500);
     }
 
-    update(deltaTime: number) {
-        
+    protected update(deltaTime: number): void {
+        // 更新冷却时间
+        if (this._coolDownTimer > 0) {
+            this._coolDownTimer -= deltaTime;
+        }
     }
 
     public addPoint(v3:Node){

@@ -1,0 +1,159 @@
+{
+  "ver": "2.3.13",
+  "importer": "gltf",
+  "imported": true,
+  "uuid": "df8e2957-5485-4a01-957b-009c1a723bd2",
+  "files": [
+    "__original-animation-0.cconb"
+  ],
+  "subMetas": {
+    "7913f": {
+      "importer": "gltf-mesh",
+      "uuid": "df8e2957-5485-4a01-957b-009c1a723bd2@7913f",
+      "displayName": "",
+      "id": "7913f",
+      "name": "球体.001.mesh",
+      "userData": {
+        "gltfIndex": 0,
+        "triangleCount": 1296
+      },
+      "ver": "1.1.1",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "1f586": {
+      "importer": "gltf-animation",
+      "uuid": "df8e2957-5485-4a01-957b-009c1a723bd2@1f586",
+      "displayName": "",
+      "id": "1f586",
+      "name": "idle.animation",
+      "userData": {
+        "gltfIndex": 0,
+        "wrapMode": 2,
+        "sample": 30,
+        "span": {
+          "from": 0,
+          "to": 1.3333333333333333
+        },
+        "events": [],
+        "embeddedPlayers": [],
+        "editorExtras": {
+          "embeddedPlayerGroups": []
+        },
+        "speed": 1,
+        "auxiliaryCurves": {}
+      },
+      "ver": "1.0.17",
+      "imported": true,
+      "files": [
+        ".cconb"
+      ],
+      "subMetas": {}
+    },
+    "11e22": {
+      "importer": "gltf-skeleton",
+      "uuid": "df8e2957-5485-4a01-957b-009c1a723bd2@11e22",
+      "displayName": "",
+      "id": "11e22",
+      "name": "rig.skeleton",
+      "userData": {
+        "gltfIndex": 0,
+        "jointsLength": 222
+      },
+      "ver": "1.0.1",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "22e2a": {
+      "importer": "gltf-material",
+      "uuid": "df8e2957-5485-4a01-957b-009c1a723bd2@22e2a",
+      "displayName": "",
+      "id": "22e2a",
+      "name": "材质.material",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.14",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "cae38": {
+      "importer": "gltf-scene",
+      "uuid": "df8e2957-5485-4a01-957b-009c1a723bd2@cae38",
+      "displayName": "",
+      "id": "cae38",
+      "name": "QtFireManIdle.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.14",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "imageMetas": [],
+    "animationImportSettings": [
+      {
+        "name": "idle",
+        "duration": 1.6666666269302368,
+        "fps": 30,
+        "splits": [
+          {
+            "name": "idle",
+            "from": 0,
+            "to": 1.3333333333333333,
+            "wrapMode": 2,
+            "previousId": "1f586"
+          }
+        ]
+      }
+    ],
+    "lods": {
+      "enable": false,
+      "hasBuiltinLOD": false,
+      "options": [
+        {
+          "screenRatio": 0.25,
+          "faceCount": 1
+        },
+        {
+          "screenRatio": 0.125,
+          "faceCount": 0.25
+        },
+        {
+          "screenRatio": 0.01,
+          "faceCount": 0.1
+        }
+      ]
+    },
+    "assetFinder": {
+      "meshes": [
+        "df8e2957-5485-4a01-957b-009c1a723bd2@7913f"
+      ],
+      "skeletons": [
+        "df8e2957-5485-4a01-957b-009c1a723bd2@11e22"
+      ],
+      "textures": [],
+      "materials": [
+        "df8e2957-5485-4a01-957b-009c1a723bd2@22e2a"
+      ],
+      "scenes": [
+        "df8e2957-5485-4a01-957b-009c1a723bd2@cae38"
+      ]
+    }
+  }
+}
