@@ -7,6 +7,7 @@ import { BulletPointPathLineCtrol } from './bulletBox/BulletPointPathLineCtrol';
 import { AppNotification } from '../qt_cocos_ts/event/AppNotification';
 import { GameEvent } from './events/GameEvent';
 import { EnemyControl } from './enemyBox/EnemyControl';
+import { GameStatusEvent } from './events/GameStatusEvent';
 const { ccclass, property } = _decorator;
 
 @ccclass('GameMainControl')
@@ -21,6 +22,8 @@ export class GameMainControl extends Component {
     @property(BulletControl)
     bulletCtrl: BulletControl = null;
     
+    public static currentStatus:GameStatusEvent = GameStatusEvent.STATUS_LOADING;
+
     private mainCamera:Camera = null;
     private enemyBox:Node = null;
     private pointPathLineBox:Node = null;
@@ -33,6 +36,7 @@ export class GameMainControl extends Component {
     }
 
     update(deltaTime: number) {
+        
         this.player.gameTick(deltaTime);
         this.bulletCtrl.gameTick(deltaTime);
         this.enemyCtrl.gameTick(deltaTime);
@@ -53,75 +57,6 @@ export class GameMainControl extends Component {
         
 
     }
-    /*
-    onEnable () {
-        input.on(Input.EventType.TOUCH_START, this.onTouchStart, this);
-        input.on(Input.EventType.TOUCH_MOVE, this.onTouchMove, this);
-        input.on(Input.EventType.TOUCH_END, this.onTouchEnd, this);
-    }
-
-    onTouchStart(event: EventTouch) {
-        // console.log("onTouchStart");
-        // console.log(event.getLocation());  // Location on screen space
-        // console.log(event.getUILocation());  // Location on UI space
-
-        AppNotification.emit(GameEvent.EVENT_STAGE_MOUSE_START, {event});
-    }
-    onTouchMove(event: EventTouch) {
-        // console.log(event.getLocation());  // Location on screen space
-        // console.log(event.getUILocation());  // Location on UI space
-        // console.log(event.getLocation()); 
-        AppNotification.emit(GameEvent.EVENT_STAGE_MOUSE_MOVE, {event});
-
-
-    }
-    onTouchEnd(event: EventTouch) {
-        // console.log(event.getLocation());  // Location on screen space
-        // console.log(event.getUILocation());  // Location on UI space
-        
-        AppNotification.emit(GameEvent.EVENT_STAGE_MOUSE_END, {event});
-        // console.log("onTouchEnd");
-
-        // this.bulletCtrl.fire(this.player);
-        
-        this.cameraSet3d();
-    }
-
     
-    
-    onDisable () {
-        input.off(Input.EventType.TOUCH_START, this.onTouchStart, this);
-        input.off(Input.EventType.TOUCH_MOVE, this.onTouchMove, this);
-        input.off(Input.EventType.TOUCH_END, this.onTouchEnd, this);
-    }
-    
-    cameraSet3d(){
-        this.mainCamera.projection = Camera.ProjectionType.PERSPECTIVE;
-        this.mainCamera.fov = 60;
-        this.mainCamera.node.setPosition(-14,0,10);
-        this.mainCamera.node.setRotationFromEuler(0,-50,0);
-    }
-    cameraSet2d(){
-        this.mainCamera.projection = Camera.ProjectionType.ORTHO;
-        this.mainCamera.fov = 5;
-        this.mainCamera.node.setPosition(0,0,10);
-        this.mainCamera.node.setRotationFromEuler(0,0,0);
-    }
-
-    onBtn(){
-        // console.log("btn click");
-        //this.player.settingPlayer();
-        // this.enemy.node.setPosition(this.enemy.node.getPosition().x, QtMath.randomInt(5,9), 0);
-        // this.mainCamera.projection === Camera.ProjectionType.PERSPECTIVE ? Camera.ProjectionType.ORTHOGRAPHIC : Camera.ProjectionType.PERSPECTIVE;
-        this.cameraSet3d();
-    }
-    onBtn2(){
-        // console.log("btn click2");
-        //开火
-        // this.player.fire();
-        // this.bulletCtrl.fire(this.player);
-        this.cameraSet2d();
-    }
-    */
 }
 

@@ -5,6 +5,8 @@ import { EuipmentControl } from '../euipmentBox/EuipmentControl';
 import { IBaseAttributes } from '../interface/IBaseAttributes';
 import { PlayerWeaponControl } from './PlayerWeaponControl';
 import { GameAnimationEvent } from '../events/GameAnimationEvent';
+import { GameMainControl } from '../GameMainControl';
+import { GameStatusEvent } from '../events/GameStatusEvent';
 const { ccclass, property } = _decorator;
 
 @ccclass('Player')
@@ -53,6 +55,7 @@ export class Player extends Component implements IBaseAttributes{
         this.playerWeaponCtrl.player = this;
         //
         this.gunObj = this.node.getChildByName('gunBox');
+        // this.gunObj = find("GameMainBox/gameBox/playerBox/playerObject/gunBox/gun");
         //
         this._playerAnimationBox = find("GameMainBox/gameBox/playerBox/playerAnimationBox");
         this._playerWeaponBox = find("GameMainBox/gameBox/playerBox/playerWeapon");
@@ -63,6 +66,8 @@ export class Player extends Component implements IBaseAttributes{
         this._playerAnimationBox.active = true;
 
         setTimeout(() => {
+            //playing
+            GameMainControl.currentStatus = GameStatusEvent.STATUS_PLAYING;
             this.hideAll();
             this._playerWeaponBox.active = true;
             this._playerObjectBox.active = true;
@@ -73,9 +78,8 @@ export class Player extends Component implements IBaseAttributes{
     setEvent(){
         //监听玩家开火
         AppNotification.on(GamePlayerEvent.EVENT_PLYAYER_FIRE, this.fire, this);
-
         //监听动画开始
-        AppNotification.on(GameAnimationEvent.ANIMATION_EVENT_START, this.playAnimation, this);
+        AppNotification.on(GameAnimationEvent.ANIMATION_EVENT_START, this.getAnimationStatus, this);
     }
 
     hideAll(b:boolean=false){
@@ -101,16 +105,10 @@ export class Player extends Component implements IBaseAttributes{
         console.log("collision exit");
     }
 
-   // 装备武器（通过索引切换）
-    
+    // 装备武器（通过索引切换）
     public fire(receiveData:any){
-        console.log("player fire");
-        // console.log(receiveData.force);
-        //挂靠武器类型
-        if (!this.playerWeaponCtrl.currentWeapon) {
-            console.log("this._currentWeapon is null");
-            return
-        };
+        if (GameMainControl.currentStatus != GameStatusEvent.STATUS_PLAYING) return;
+        if (!this.playerWeaponCtrl.currentWeapon) return;
         const weaponData = this.euipmentCtl.euipmentDataListMap.get('weapon');
         const data = {
             force:receiveData.force,
@@ -118,23 +116,26 @@ export class Player extends Component implements IBaseAttributes{
         }
         //
         this.playerWeaponCtrl.currentWeapon.attackTarget(data);
-
-        
     }
 
-    public playAnimation(){
+    getAnimationStatus(receiveData:any){
+        console.log("getAnimationStatus",receiveData.statusId);
+        this.playAnimation(receiveData.statusId);
+    }
+    public playAnimation(statusId:number=1){
         this.hideAll();
         let skAnimation = this._playerAnimationBox.getComponentInChildren(SkeletalAnimation);
         skAnimation?.stop();
-        const randomFloat = Math.round(Math.random() * (3 - 1)) + 1;
-        console.log("randomFloat",randomFloat);
-        if(randomFloat == 1){
+        // 
+        GameMainControl.currentStatus = GameStatusEvent.STATUS_IDLE;
+        if(statusId == 1){
+            GameMainControl.currentStatus = GameStatusEvent.STATUS_PLAYING;
             this._playerWeaponBox.active = true;
             this._playerObjectBox.active = true;
-        }else if(randomFloat == 2 ){
+        }else if(statusId == 2 ){
             this._playerAnimationBox.active = true;
             skAnimation?.crossFade("run");
-        }else if(randomFloat == 3 ){
+        }else if(statusId == 3 ){
             this._playerAnimationBox.active = true;
             skAnimation?.crossFade("walk");
         }

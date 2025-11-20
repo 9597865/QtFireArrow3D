@@ -28,7 +28,6 @@ export class stageUi2d extends Component {
         input.on(Input.EventType.KEY_UP, this.onKeyUp, this);
         input.on(Input.EventType.KEY_DOWN, this.onKeyDown, this);
 
-
         input.on(Input.EventType.TOUCH_START, this.onTouchStart, this);
         input.on(Input.EventType.TOUCH_MOVE, this.onTouchMove, this);
         input.on(Input.EventType.TOUCH_END, this.onTouchEnd, this);
@@ -38,7 +37,6 @@ export class stageUi2d extends Component {
         // console.log("onTouchStart");
         // console.log(event.getLocation());  // Location on screen space
         // console.log(event.getUILocation());  // Location on UI space
-
         AppNotification.emit(GameEvent.EVENT_STAGE_MOUSE_START, {event});
     }
     onTouchMove(event: EventTouch) {
@@ -46,24 +44,11 @@ export class stageUi2d extends Component {
         // console.log(event.getUILocation());  // Location on UI space
         // console.log(event.getLocation()); 
         AppNotification.emit(GameEvent.EVENT_STAGE_MOUSE_MOVE, {event});
-
-
     }
     onTouchEnd(event: EventTouch) {
         // console.log(event.getLocation());  // Location on screen space
         // console.log(event.getUILocation());  // Location on UI space
-        
         AppNotification.emit(GameEvent.EVENT_STAGE_MOUSE_END, {event});
-        // console.log("onTouchEnd");
-
-        // this.bulletCtrl.fire(this.player);
-        
-        if(0){
-            this.cameraSet3d();
-            setTimeout(() => {
-                this.cameraSet2d();
-            },2000);
-        }
     }
 
     
@@ -129,7 +114,8 @@ export class stageUi2d extends Component {
     }
     onBtn4(){
         // console.log("btn click4");
-        AppNotification.emit(GameAnimationEvent.ANIMATION_EVENT_START, {});  
+        const randomFloat = Math.round(Math.random() * (3 - 1)) + 1;
+        AppNotification.emit(GameAnimationEvent.ANIMATION_EVENT_START, {statusId:randomFloat});  
     }
 }
 

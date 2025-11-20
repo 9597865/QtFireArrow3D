@@ -1,10 +1,12 @@
-import { _decorator, Camera, Component, find, instantiate, Node, Prefab, UITransform, Vec2, Vec3 } from 'cc';
+import { _decorator, Camera, Component, find, instantiate, Node, Prefab, tween, UITransform, Vec2, Vec3 } from 'cc';
 import { AppNotification } from '../../qt_cocos_ts/event/AppNotification';
 import { GameEvent } from '../events/GameEvent';
 import { getPointsBetweenTwoPoints } from '../../qt_cocos_ts/utils/PointCalculator';
 import { Player } from '../playerBox/Player';
 import { QtMath } from '../../qt_cocos_ts/utils/QtMath';
 import { GamePlayerEvent } from '../events/GamePlayerEvent';
+import { GameMainControl } from '../GameMainControl';
+import { GameStatusEvent } from '../events/GameStatusEvent';
 const { ccclass, property } = _decorator;
 
 @ccclass('BulletPointPathLineCtrol')
@@ -93,7 +95,7 @@ export class BulletPointPathLineCtrol extends Component {
         let playerPosLength:number = Math.min(playerPos.length(),18);
         this._force = Math.round(playerPosLength);
     }
-    createPointLine(totalPoint:number = 10){
+    createPointLine(totalPoint:number = 15){
         //
         this._firePointNode.removeAllChildren();
         this._firePointNode.setRotationFromEuler(0,0,60);
@@ -101,12 +103,13 @@ export class BulletPointPathLineCtrol extends Component {
         for(let i = 0; i < totalPoint; i++){
             const arrowPos:Vec3 = this._firePointNode.getPosition();
             const step:number = 0.005+i*0.2;
-            const scale:number = 0.018+0.08/(i+1);
+            const scale:number = 0.018+0.08/i;
             const p = instantiate(this.point);
             const posY:number = -Math.pow(i*(20-totalPoint)/100*(20-totalPoint)/20,2);
             const v3 = arrowPos.add(new Vec3(1+step,posY,0));
             p.setPosition(v3);
             p.setScale(new Vec3(scale,scale,scale));
+            // tween(p).to(0.2, { opacity: 0 }).start();
             this._firePointNode.addChild(p);
         }
 
@@ -124,33 +127,39 @@ export class BulletPointPathLineCtrol extends Component {
         if(!this._player){
             return;
         }
-
-        let p1:Vec3 = this._player.node.getPosition();
-        p1.z = 0;
-        let p2:Vec3 = this._cameraObj.screenToWorld(data.event.getLocation().toVec3()); // new Vec3(2,2,2);
-        let p2Local:Vec3 = this._uiTransform.convertToNodeSpaceAR(p2);
-        p2Local.z = 0;
-
-        //计算出力度的百分比
-        let percent:number = Math.round(this._force/18*100)/100;
-        //总数为10个点
-        let pointTotal:number = Math.min(percent,1)*10;
-        // 百分比的1.5倍，为最终显示点数
-        pointTotal = Math.min(Math.round(pointTotal*1.5),10);
-        //---------------------------------------
-        let playerPos:Vec3 = p1.subtract(p2Local);
-        const targetAngle = Math.atan2(playerPos.y, playerPos.x);
-        let targetDegree = QtMath.radiansToDegrees(targetAngle) + 120;
-        //player角度
-        this._player.setGunAngle(targetDegree);
-        this._fireAngleTargetBox.setRotationFromEuler(0,0,targetDegree);
-        this._fireArrowBox.setRotationFromEuler(0,0,targetDegree);
-        //
-        this.createPointLine(pointTotal);
-
-        //鼠标，触摸，力度为距离
-        let playerPosLength:number = Math.min(playerPos.length(),18);
-        this._force = Math.round(playerPosLength);
+        if (GameMainControl.currentStatus == GameStatusEvent.STATUS_PLAYING){
+            let p1:Vec3 = this._player.node.getPosition();
+            p1.z = 0;
+            let p2:Vec3 = this._cameraObj.screenToWorld(data.event.getLocation().toVec3());
+            let p2Local:Vec3 = this._uiTransform.convertToNodeSpaceAR(p2);
+            p2Local.z = 0;
+        
+            //计算出力度的百分比
+            let percent:number = Math.round(this._force/18*100)/100;
+            //总数为10个点
+            let pointTotal:number = Math.min(percent,1)*10;
+            // 百分比的1.5倍，为最终显示点数
+            pointTotal = Math.min(Math.round(pointTotal*1.5),12);
+            //---------------------------------------
+            let playerPos:Vec3 = p1.subtract(p2Local);
+            const targetAngle = Math.atan2(playerPos.y, playerPos.x);
+            let deg = QtMath.radiansToDegrees(targetAngle) + 120;
+            //
+            let n = (deg + 360)%360;
+            if(n>= 260 && n <= 355){
+                //player角度
+                this._player.setGunAngle(n);
+                this._fireAngleTargetBox.setRotationFromEuler(0,0,n);
+                this._fireArrowBox.setRotationFromEuler(0,0,n);
+                console.log("BulletPointPathLineCtrol onStageMouseMove",n);
+            }
+            //
+            this.createPointLine(pointTotal);
+            //
+            //鼠标，触摸，力度为距离
+            let playerPosLength:number = Math.min(playerPos.length(),18);
+            this._force = Math.round(playerPosLength);
+        }
     }
     /**
      * 处理鼠标在舞台上释放结束事件的回调函数
@@ -162,13 +171,15 @@ export class BulletPointPathLineCtrol extends Component {
         // 重置冷却时间并播放攻击动画
         this._coolDownTimer = 1;
 
-        // 发射玩家开火事件通知，并传递计算后的力度值
-        // 力度值经过标准化处理：原始力度除以18并保留两位小数
-        AppNotification.emit(GamePlayerEvent.EVENT_PLYAYER_FIRE,{force:Math.round(this._force/18*100)/100});
-        // this._force = 0;
-        // 隐藏开火角度
-        this._fireAngleTargetBox.active = false;
-        setTimeout(()=>{this._fireAngleTargetBox.active = true;},500);
+        if (GameMainControl.currentStatus == GameStatusEvent.STATUS_PLAYING){
+            // 发射玩家开火事件通知，并传递计算后的力度值
+            // 力度值经过标准化处理：原始力度除以18并保留两位小数
+            AppNotification.emit(GamePlayerEvent.EVENT_PLYAYER_FIRE,{force:Math.round(this._force/18*100)/100});
+            // this._force = 0;
+            // 隐藏开火角度
+            this._fireAngleTargetBox.active = false;
+            setTimeout(()=>{this._fireAngleTargetBox.active = true;},500);
+        }
     }
 
     protected update(deltaTime: number): void {

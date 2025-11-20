@@ -1,6 +1,8 @@
 import { _decorator, Component, Node, SkeletalAnimation, SkeletalAnimationState, Animation, Socket } from 'cc';
 import { AppNotification } from '../../qt_cocos_ts/event/AppNotification';
 import { GamePlayerEvent } from '../events/GamePlayerEvent';
+import { GameMainControl } from '../GameMainControl';
+import { GameStatusEvent } from '../events/GameStatusEvent';
 const { ccclass, property } = _decorator;
 
 @ccclass('PlayerSkeletalAnimationControl')
@@ -34,7 +36,7 @@ export class PlayerSkeletalAnimationControl extends Component {
         this._skeletalAnimation?.play("angle_body"); 
     }
     fire() {
-        console.log("fire");
+        if (GameMainControl.currentStatus != GameStatusEvent.STATUS_PLAYING) return;
         this._skeletalAnimation?.play("attack");
         setTimeout(() => {
             this._skeletalAnimation?.play("angle_body");
