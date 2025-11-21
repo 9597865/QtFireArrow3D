@@ -8,5 +8,7 @@ export interface IBulletDataObject<T = void>{
     bulletAngle:number,
     enemyBody?:EnemyObject,
     enemyHead?:EnemyObject,
+    enemyCrownTorus?:EnemyObject,
+    enemyBodyHitChest?:EnemyObject,
     qtUILabelAni?:ILabelAnimation
 }

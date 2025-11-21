@@ -53,6 +53,8 @@ export class BulletControl extends Component {
         // console.log('this.label2dBox', this.label2dBox);
         // console.log(this.label2dBox);
 
+        AppNotification.on(GameEvent.EVENT_BULLET_HIT_ENEMYOBJECT_BODY_CHEST, this.onBulletHitEnemyBodyChest, this);
+        AppNotification.on(GameEvent.EVENT_BULLET_HIT_ENEMYOBJECT_HEADCROWN, this.onBulletHitEnemyHeadCrown, this);
         AppNotification.on(GameEvent.EVENT_BULLET_HIT_ENEMYOBJECT_HEAD, this.onBulletHitEnemyHead, this);
         AppNotification.on(GameEvent.EVENT_BULLET_HIT_ENEMYOBJECT_BODY, this.onBulletHitEnemyBody, this);
         AppNotification.on(GameEvent.EVENT_BULLET_HIT_FLOOR, this.onBulletHitFloor, this);
@@ -64,7 +66,91 @@ export class BulletControl extends Component {
     gameTick(deltaTime: number) {
         
     }
+    onBulletHitEnemyHeadCrown(data:IBulletDataObject){
+       console.log("qtUILabelAni onBulletHitEnemyHeadCrown"); 
+       const {bulletAngle, bulletObject:bltObj, enemyCrownTorus, qtUILabelAni} = data;
+        // 获取子弹节点的位置坐标
+        const {x,y,z} = bltObj.node.getPosition();
+        //粒子特效部分
+        const particleIndex = Math.floor(this.bulletParticleArr.length-1);  // 获取粒子特效数组最后一个元素的索引
+        const particleFab = this.bulletParticleArr[particleIndex];  // 获取粒子特效预制体
+        const particleNode:Node = instantiate(particleFab);  // 实例化粒子特效节点
+        particleNode.setPosition(x,y,z);  // 设置粒子特效位置
+        this.bulletParticleBox.addChild(particleNode);  // 将粒子特效添加到子弹粒子盒子中
+        //
+        const ps:ParticleSystem = particleNode.getComponent(ParticleSystem) as ParticleSystem;
+        ps.play(); 
+        // 
+        if(qtUILabelAni){
+            let labelTxt:ILabelAnimation = qtUILabelAni; //new QtUILabelAnimation();
+            labelTxt.labelFab = this.numLabel2dPrefab;
+            labelTxt.showDuration = 1;
+            labelTxt.labelString = "-200";
+            labelTxt.showLabel(enemyCrownTorus,this.label2dBox);
+        }
+        // console.log("打到头部life", enemyCrownTorus.hp);
+        enemyCrownTorus.beaten(bltObj.bulletAttack*2);  // 敌人头部受到攻击
+        //------------------------------
+        //创建一个静态子弹，没有碰撞属性，插进了敌人身上
+        const blt = instantiate(this.bulletStaticPrefab);
+        blt.setPosition(x,y,z);
+        blt.setScale(1,1,1);
+        blt.setRotationFromEuler(0,0,bulletAngle);
+        this.bulletCylinderStaticBox.addChild(blt);
+        //
+        const bltParticleNode:ParticleSystem = blt.getChildByName('flyLightParticle').getComponent(ParticleSystem) as ParticleSystem;
+        bltParticleNode.stop();
+        //------------------------------
+        // 延迟执行销毁操作
+        setTimeout(() => {
+            blt.destroy();
+            //
+            particleNode.destroy();  // 销毁粒子特效节点
+            // 静态子弹部分（已注释）
+            if(enemyCrownTorus.hp<=0) {
+                enemyCrownTorus.del();
+            }  // 如果敌人生命值小于等于0，则删除敌人
+        }, 1500);  // 延迟1秒执行
+    }
+    onBulletHitEnemyBodyChest(data:IBulletDataObject){
+       const {bulletAngle, bulletObject:bltObj, enemyBodyHitChest, qtUILabelAni} = data;
+        // 获取子弹节点的位置坐标
+        const {x,y,z} = bltObj.node.getPosition();
+        //粒子特效部分
+        const particleIndex = Math.floor(this.bulletParticleArr.length-1);  // 获取粒子特效数组最后一个元素的索引
+        const particleFab = this.bulletParticleArr[particleIndex];  // 获取粒子特效预制体
+        const particleNode:Node = instantiate(particleFab);  // 实例化粒子特效节点
+        particleNode.setPosition(x,y,z);  // 设置粒子特效位置
+        // particleNode.setScale(2,2,2);  // 设置粒子特效缩放（已注释）
+        // particleNode.setRotationFromEuler(0,0,bltAngle);  // 设置粒子特效旋转（已注释）
+        this.bulletParticleBox.addChild(particleNode);  // 将粒子特效添加到子弹粒子盒子中
+        //
+        const ps:ParticleSystem = particleNode.getComponent(ParticleSystem) as ParticleSystem;
+        ps.play();  // 播放粒子特效
+        
+        
 
+        if(qtUILabelAni){
+            let labelTxt:ILabelAnimation = qtUILabelAni; //new QtUILabelAnimation();
+            labelTxt.labelFab = this.numLabel2dPrefab;
+            labelTxt.showDuration = 1;
+            labelTxt.labelString = "-80";
+            labelTxt.showLabel(enemyBodyHitChest,this.label2dBox);
+        }
+
+
+        console.log("打到胸部部life", enemyBodyHitChest.hp);
+
+        enemyBodyHitChest.beaten(bltObj.bulletAttack*2);  // 敌人头部受到攻击
+
+        // 延迟执行销毁操作
+        setTimeout(() => {
+            particleNode.destroy();  // 销毁粒子特效节点
+            // 静态子弹部分（已注释）
+            // enemyHead.node.parent.parent.destroy();
+            if(enemyBodyHitChest.hp<=0) enemyBodyHitChest.del();  // 如果敌人生命值小于等于0，则删除敌人
+        }, 1000);  // 延迟1秒执行 
+    }
     /**
      * 处理子弹击中敌人头部的函数
      * @param data 包含子弹信息的对象，包含子弹角度、子弹对象和敌人头部信息
@@ -85,19 +171,9 @@ export class BulletControl extends Component {
         //
         const ps:ParticleSystem = particleNode.getComponent(ParticleSystem) as ParticleSystem;
         ps.play();  // 播放粒子特效
-        /*
-        //创建label2d
-        let enemyHeadWorldPos: Vec3 = enemyHead.node.getWorldPosition();
-        let screenPos: Vec3  = this.mainCamera.worldToScreen(enemyHeadWorldPos); 
-        //
-        let wPos:Vec3 = this.uiCamera.screenToWorld(screenPos);
-        let pos:Vec3 = this.uiTransform.convertToNodeSpaceAR(wPos);
-        //
-        const labelScore:Node = instantiate(this.numLabel2dPrefab);
-        labelScore.setPosition(pos.x, pos.y, 0);
-        labelScore.getComponent(Label).string = "100";
-        this.label2dBox.addChild(labelScore);
-        */
+        
+        
+
         if(qtUILabelAni){
             let labelTxt:ILabelAnimation = qtUILabelAni; //new QtUILabelAnimation();
             labelTxt.labelFab = this.numLabel2dPrefab;
@@ -105,6 +181,7 @@ export class BulletControl extends Component {
             labelTxt.labelString = "-100";
             labelTxt.showLabel(enemyHead,this.label2dBox);
         }
+
 
         console.log("打到头部life", enemyHead.hp);
 
@@ -178,7 +255,6 @@ export class BulletControl extends Component {
         // const particleNode:ParticleSystem = blt.getComponentInChildren(ParticleSystem) as ParticleSystem;
         const particleNode:ParticleSystem = blt.getChildByName('flyLightParticle').getComponent(ParticleSystem) as ParticleSystem;
         particleNode.stop();
-
         
         setTimeout(() => {
             blt.destroy();

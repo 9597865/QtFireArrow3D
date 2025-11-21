@@ -80,7 +80,7 @@ export class EnemyObject extends Component implements IBaseAttributes{
      */
     public beaten(_damage:number = 1){
         //
-        this.scaleNode(_damage) ;
+        // this.scaleNode(_damage) ;
         //-------------------------------
         this._hp -= _damage;
         //

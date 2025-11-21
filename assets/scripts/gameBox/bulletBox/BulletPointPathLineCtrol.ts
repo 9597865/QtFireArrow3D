@@ -34,14 +34,11 @@ export class BulletPointPathLineCtrol extends Component {
         AppNotification.on(GameEvent.EVENT_STAGE_MOUSE_MOVE, this.onStageMouseMove, this);
         AppNotification.on(GameEvent.EVENT_STAGE_MOUSE_END, this.onStageMouseEnd, this);
 
-        
         this._uiTransform = this.getComponent(UITransform);
         // if(this._uiTransform){}
         this._cameraObj = find("Main Camera").getComponent(Camera) as Camera;
         this._player = find("GameMainBox/gameBox/playerBox/playerObject").getComponent(Player) as Player;
-
-        
-        
+        // 
         let socketPath:string = "GameMainBox/gameBox/playerBox/playerObject/gunBox/QtFireManAngleBody/VIS_upper_arm_ik_pole.R Socket/";
         this._weaponNode = find(socketPath+"weaponBox");
         //
@@ -50,7 +47,6 @@ export class BulletPointPathLineCtrol extends Component {
         this._firePointNode = this._fireAngleTargetBox.getChildByName("firePointBox");
         
         this.createPointLine();
-       
         
     }
     

@@ -39,7 +39,8 @@ export class BulletCollider extends Component {
     private onCollisionEnter (e: ICollisionEvent){
         // console.log(e.selfCollider.name);//bulletCylinder<BoxCollider>
         // console.log('e.otherCollider.tag');
-        // console.log('---'+e.otherCollider.name);
+        // console.log('-onCollisionEnter-'+e.otherCollider.name);
+        // // console.log(e.otherCollider.node.parent.parent.parent.parent.getComponent(EnemyObject));
         // console.log(e.otherCollider.node.parent);
         // this.collider.off('onCollisionEnter', this.onCollisionEnter);
         // const selfName = e.selfCollider.name;
@@ -60,6 +61,35 @@ export class BulletCollider extends Component {
                 nd.node.active = false;
                 AppNotification.emit(GameEvent.EVENT_BULLET_HIT_FLOOR, {bulletObject:nd, bulletAngle:angle});
                 this.collider.off('onCollisionEnter', this.onCollisionEnter);
+                break;
+                
+            case 'enemyCrownTorus<BoxCollider>':
+                nd.velocity = Vec3.ZERO; 
+                nd.node.active = false;
+                AppNotification.emit(
+                    GameEvent.EVENT_BULLET_HIT_ENEMYOBJECT_HEADCROWN, 
+                    {
+                        enemyCrownTorus:e.otherCollider.node.parent.parent.parent.parent.parent.getComponent(EnemyObject),
+                        bulletObject:nd, 
+                        bulletAngle:angle,
+                        qtUILabelAni:new QtUILabelAnimation(),
+                    }
+                );
+                this.collider.off('onCollisionEnter', this.onCollisionEnter);
+                break;
+            case 'enemyBodyHitChest<BoxCollider>':
+                nd.velocity = Vec3.ZERO; 
+                nd.node.active = false;
+                AppNotification.emit(
+                    GameEvent.EVENT_BULLET_HIT_ENEMYOBJECT_BODY_CHEST, 
+                    {
+                        enemyBodyHitChest:e.otherCollider.node.parent.parent.parent.parent.parent.getComponent(EnemyObject),
+                        bulletObject:nd, 
+                        bulletAngle:angle,
+                        qtUILabelAni:new QtUILabelAnimation(),
+                    }
+                );
+                this.collider.off('onCollisionEnter', this.onCollisionEnter); 
                 break;
             case 'enemyHead<BoxCollider>':
                 nd.velocity = Vec3.ZERO; 
@@ -97,7 +127,7 @@ export class BulletCollider extends Component {
                 break;
         }
         
-        console.log('bulletFab<BoxCollider>----',otherName);
+        // console.log('bulletFab<BoxCollider>----',otherName);
 
 
     }

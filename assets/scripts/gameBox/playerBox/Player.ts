@@ -54,12 +54,12 @@ export class Player extends Component implements IBaseAttributes{
         this.playerWeaponCtrl = this.addComponent(PlayerWeaponControl);
         this.playerWeaponCtrl.player = this;
         //
-        this.gunObj = this.node.getChildByName('gunBox');
-        // this.gunObj = find("GameMainBox/gameBox/playerBox/playerObject/gunBox/gun");
+        let playerPathStr:string = "GameMainBox/gameBox/playerBox/";
+        this.gunObj = find(playerPathStr+"playerObject/gunBox");
         //
-        this._playerAnimationBox = find("GameMainBox/gameBox/playerBox/playerAnimationBox");
-        this._playerWeaponBox = find("GameMainBox/gameBox/playerBox/playerWeapon");
-        this._playerObjectBox = find("GameMainBox/gameBox/playerBox/playerObject");
+        this._playerAnimationBox = find(playerPathStr+"playerAnimationBox");
+        this._playerWeaponBox = find(playerPathStr+"playerWeapon");
+        this._playerObjectBox = find(playerPathStr+"playerObject");
 
         this.hideAll();
 
