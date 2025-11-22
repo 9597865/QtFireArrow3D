@@ -31,6 +31,7 @@ export class EnemyControl extends Component {
             // const angle = Vec3.angle(v3Pos, new Vec3(0, 0, 0));
             enemyObj.setPosition(v3Pos);
             // enemyObj.setScale(new Vec3(1+i/5,1+i/5,1+i/5));
+            enemyObj.setScale(new Vec3(0.8,0.8,0.8));
             // enemyObj.setRotationFromEuler(0,0,bltAngle);
             const bloodBox = enemyObject.node.getChildByName("bloodBox");
             // const enemyUiBlood:Node = instantiate(this.uiBloodPrefab); 

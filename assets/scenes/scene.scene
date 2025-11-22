@@ -884,7 +884,7 @@
       "__type__": "cc.Vec3",
       "x": -0.586,
       "y": 0.604,
-      "z": 0
+      "z": 0.29
     }
   },
   {
@@ -947,8 +947,8 @@
     "value": {
       "__type__": "cc.Vec3",
       "x": 0.2,
-      "y": 0.3,
-      "z": 0.3
+      "y": 0.2,
+      "z": 0.2
     }
   },
   {
@@ -3837,6 +3837,10 @@
     "bulletParticleArr": [
       {
         "__uuid__": "2be7e16e-35eb-45a9-a737-7f3701148c6f",
+        "__expectedType__": "cc.Prefab"
+      },
+      {
+        "__uuid__": "5194139a-966d-4642-b231-788bae863d5f",
         "__expectedType__": "cc.Prefab"
       }
     ],

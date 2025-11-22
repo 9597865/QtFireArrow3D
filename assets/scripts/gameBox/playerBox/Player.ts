@@ -68,8 +68,8 @@ export class Player extends Component implements IBaseAttributes{
             this.hideAll();
             this._playerWeaponBox.active = true;
             this._playerObjectBox.active = true;
-            console.log("playerAnimationBox is hide");
-        }, 2000);
+            // console.log("playerAnimationBox is hide");
+        }, 1000);
 
     }
     setEvent(){

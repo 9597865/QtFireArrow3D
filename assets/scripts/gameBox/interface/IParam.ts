@@ -4,12 +4,9 @@ import { EnemyObject } from "../enemyBox/EnemyObject";
 import { ILabelAnimation } from "./ILabelAnimation";
 
 export interface IBulletDataObject<T = void>{
+    name:string,
     bulletObject:BulletObject,
     bulletAngle:number,
-    enemyBody?:EnemyObject,
-    enemyHead?:EnemyObject,
-    enemyCrownTorus?:EnemyObject,
-    enemyBodyHitChest?:EnemyObject,
-    enemyHitLeg?:EnemyObject,
+    enemyObject?:EnemyObject,
     qtUILabelAni?:ILabelAnimation
 }
