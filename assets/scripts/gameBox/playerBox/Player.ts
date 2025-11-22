@@ -16,13 +16,10 @@ export class Player extends Component implements IBaseAttributes{
     euipmentCtl: EuipmentControl = null;
 
     @property
-    // 基础生命值
     private _hp: number = 100;
     @property
-    // 基础魔法值
     private _mp: number = 100;
     @property
-    // 基础攻击力
     private _attack: number = 10;
     @property
     // 基础防御力

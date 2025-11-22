@@ -8,12 +8,14 @@ const { ccclass, property } = _decorator;
 
 @ccclass('BulletCollider')
 export class BulletCollider extends Component {
-    
+    private isColliding = false; // 标记是否正在碰撞 
     private collider:ColliderComponent = null;
     private rigid:RigidBody = null;
     start() {
         //
         this.rigid = this.getComponent(RigidBody);
+        this.rigid.enabled = true;
+        console.log("rigid",this.rigid);
         // console.log('BulletCollider start');
         // console.log(this.rg);
         // 注册碰撞事件
@@ -21,10 +23,17 @@ export class BulletCollider extends Component {
         // console.log(collider);
         // if (collider) {
             // collider.on(ContactTiype.BEGIN_CONTACT, this.onBeginContact, this);
-            this.collider.on('onCollisionEnter', this.onCollisionEnter, this);
-            this.collider.on('onCollisionStay', this.onCollisionStay, this);
-            this.collider.on('onCollisionExit', this.onCollisionExit, this);
+            // this.collider.on('onCollisionEnter', this.onCollisionEnter, this);
+            // this.collider.on('onCollisionStay', this.onCollisionStay, this);
+            // this.collider.on('onCollisionExit', this.onCollisionExit, this);
         // }   
+        // if (this.collider) {
+            this.collider.on('onCollisionEnter', this.onCollisionEnter, this);
+            // this.collider.on('onCollisionExit', this.onCollisionExit, this);
+        // }   
+        console.log('BulletCollider start');
+        // onTriggerEnter
+        // onTriggerStay
     }
 
     update(deltaTime: number) {
@@ -34,7 +43,8 @@ export class BulletCollider extends Component {
     private onCollisionStay(e: ICollisionEvent){
     }
     private onCollisionExit (e: ICollisionEvent){
-        
+        // this.isColliding = false;
+        console.log('碰撞结束');
     }
     private onCollisionEnter (e: ICollisionEvent){
         // console.log(e.selfCollider.name);//bulletCylinder<BoxCollider>
@@ -44,6 +54,16 @@ export class BulletCollider extends Component {
         // console.log(e.otherCollider.node.parent);
         // this.collider.off('onCollisionEnter', this.onCollisionEnter);
         // const selfName = e.selfCollider.name;
+        // if (!this.isColliding) {
+            // this.isColliding = true;
+            console.log('碰撞开始');
+            // 在这里处理碰撞逻辑（例如播放动画、扣血等）
+        // e.otherCollider.active = false;
+        // setTimeout(() => {
+            // e.otherCollider.active = true;
+        // }, 100);
+        
+        //
         let nd:BulletObject = this.node.parent.getComponent(BulletObject) as BulletObject;
         if(nd==null){
             return;
@@ -75,7 +95,7 @@ export class BulletCollider extends Component {
                         qtUILabelAni:new QtUILabelAnimation(),
                     }
                 );
-                this.collider.off('onCollisionEnter', this.onCollisionEnter);
+                // this.collider.off('onCollisionEnter', this.onCollisionEnter);
                 break;
             case 'enemyBodyHitChest<BoxCollider>':
                 nd.velocity = Vec3.ZERO; 
@@ -89,29 +109,15 @@ export class BulletCollider extends Component {
                         qtUILabelAni:new QtUILabelAnimation(),
                     }
                 );
-                this.collider.off('onCollisionEnter', this.onCollisionEnter); 
+                // this.collider.off('onCollisionEnter', this.onCollisionEnter); 
                 break;
-            case 'enemyHead<BoxCollider>':
+            case 'enemyHitLeg<BoxCollider>':
                 nd.velocity = Vec3.ZERO; 
                 nd.node.active = false;
                 AppNotification.emit(
-                    GameEvent.EVENT_BULLET_HIT_ENEMYOBJECT_HEAD, 
+                    GameEvent.EVENT_BULLET_HIT_ENEMYOBJECT_LEG, 
                     {
-                        enemyHead:e.otherCollider.node.parent.parent.getComponent(EnemyObject),
-                        bulletObject:nd, 
-                        bulletAngle:angle,
-                        qtUILabelAni:new QtUILabelAnimation(),
-                    }
-                );
-                break;
-            case 'enemyBody<BoxCollider>':
-                //打中敌人身体
-                nd.velocity = Vec3.ZERO; 
-                nd.node.active = false;
-                AppNotification.emit(
-                    GameEvent.EVENT_BULLET_HIT_ENEMYOBJECT_BODY, 
-                    {
-                        enemyBody:e.otherCollider.node.parent.parent.getComponent(EnemyObject),
+                        enemyHitLeg:e.otherCollider.node.parent.parent.parent.parent.parent.getComponent(EnemyObject),
                         bulletObject:nd, 
                         bulletAngle:angle,
                         qtUILabelAni:new QtUILabelAnimation(),
@@ -129,7 +135,7 @@ export class BulletCollider extends Component {
         
         // console.log('bulletFab<BoxCollider>----',otherName);
 
-
+        
     }
 }
 

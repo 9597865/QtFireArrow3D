@@ -147,7 +147,7 @@ export class BulletPointPathLineCtrol extends Component {
                 this._player.setGunAngle(n);
                 this._fireAngleTargetBox.setRotationFromEuler(0,0,n);
                 this._fireArrowBox.setRotationFromEuler(0,0,n);
-                console.log("BulletPointPathLineCtrol onStageMouseMove",n);
+                // console.log("BulletPointPathLineCtrol onStageMouseMove",n);
             }
             //
             this.createPointLine(pointTotal);

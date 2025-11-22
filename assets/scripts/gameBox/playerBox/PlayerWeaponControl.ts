@@ -19,7 +19,6 @@ export class PlayerWeaponControl extends Component {
         this.equipWeapon(0);
     }
     setEvent(){
-        console.log("PlayerWeaponControl setEvent");
         //监听 键盘按下事件
         AppNotification.on(GameEvent.EVENT_GAME_KEY_DOWN, this.stageOnKeyDown, this); 
         //

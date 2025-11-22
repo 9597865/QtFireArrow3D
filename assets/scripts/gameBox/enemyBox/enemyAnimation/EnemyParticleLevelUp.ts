@@ -27,8 +27,8 @@ export class EnemyParticle_LevelUp extends Component implements IParticleAnimati
         if(args.length > 0){
             // playCallback = args[0];
         }
-        console.log("play");
-        console.log(args);
+        // console.log("play");
+        // console.log(args);
         const ptNode:Node = this._particleNode.getChildByName(childPTName);
         ptNode.setScale(2.5, 2.5, 2.5);
         const pt:ParticleSystem = ptNode.getComponent(ParticleSystem) as ParticleSystem;

@@ -10,5 +10,6 @@ export interface IBulletDataObject<T = void>{
     enemyHead?:EnemyObject,
     enemyCrownTorus?:EnemyObject,
     enemyBodyHitChest?:EnemyObject,
+    enemyHitLeg?:EnemyObject,
     qtUILabelAni?:ILabelAnimation
 }

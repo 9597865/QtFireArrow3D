@@ -50,7 +50,7 @@ export class QtUILabelAnimation extends Component implements ILabelAnimation {
         let mountWorldPos: Vec3 = mountComponent.node.getWorldPosition(); 
         let screenPos: Vec3  = this.mainCamera.worldToScreen(mountWorldPos); 
         // console.log('mountWorldPos', mountWorldPos);
-        console.log('screenPos',screenPos);
+        // console.log('screenPos',screenPos);
         //
         let uiTransform:UITransform = parentBox.getComponent(UITransform);
         let wPos:Vec3 = this.uiCamera.screenToWorld(screenPos);

@@ -15,6 +15,7 @@ export class GameEvent {
     
     public static EVENT_BULLET_HIT_ENEMYOBJECT_BODY_CHEST:string = "event_bullet_hit_enemyobject_body_chest" 
     public static EVENT_BULLET_HIT_ENEMYOBJECT_HEADCROWN:string = "event_bullet_hit_enemyobject_headcrown" 
+    public static EVENT_BULLET_HIT_ENEMYOBJECT_LEG:string = "event_bullet_hit_enemyobject_leg" 
     public static EVENT_BULLET_HIT_ENEMYOBJECT_HEAD:string = "event_bullet_hit_enemyobject_head" 
     public static EVENT_BULLET_HIT_ENEMYOBJECT_BODY:string = "event_bullet_hit_enemyobject_body" 
     public static EVENT_BULLET_HIT_FLOOR:string = "event_bullet_hit_floor"
